@@ -1,0 +1,2386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Area & Perimeter Workshop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F5F8FD; --grid:rgba(46,134,222,.08); --card:#FFFFFF; --ink:#172338; --muted:#56678A;
+  --line:#D3DEEE; --soft:#ECF2FA; --edge:#172338; --shadow:#172338; --on-ink:#FFFFFF;
+  --c0:#1FAE7A; --c1:#F2B705; --c2:#E14545; --c3:#2E86DE; --c4:#8B5CF6; --c5:#D6336C; --c6:#E8590C; --c7:#5B5BD6; --teal:#0F8B8D;
+  --t0:#11825A; --t1:#946F00; --t2:#C22E2E; --t3:#1C68BA; --t4:#6A40DA; --t5:#AF1E55; --t6:#B8460A;
+  --good:#0E7C55; --goodbg:#E0F5EB; --bad:#BD2D2D; --badbg:#FCE8E8;
+  --cw:2.15rem;
+  --fd:'Fredoka','Trebuchet MS','Segoe UI',system-ui,sans-serif;
+  --fb:'Lexend','Trebuchet MS','Segoe UI',system-ui,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0E1524; --grid:rgba(120,160,220,.07); --card:#162036; --ink:#E7EEF9; --muted:#9EB0CD;
+    --line:#2B3B58; --soft:#1C2842; --edge:#8FA3C6; --shadow:#04070D; --on-ink:#0E1524;
+    --t0:#3DDC9C; --t1:#FFCB3D; --t2:#FF7D7D; --t3:#70B5FF; --t4:#B89CFF; --t5:#FF72A6; --t6:#FF9A5C;
+    --good:#44DDA0; --goodbg:#10372A; --bad:#FF8C8C; --badbg:#3B1A20;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0E1524; --grid:rgba(120,160,220,.07); --card:#162036; --ink:#E7EEF9; --muted:#9EB0CD;
+  --line:#2B3B58; --soft:#1C2842; --edge:#8FA3C6; --shadow:#04070D; --on-ink:#0E1524;
+  --t0:#3DDC9C; --t1:#FFCB3D; --t2:#FF7D7D; --t3:#70B5FF; --t4:#B89CFF; --t5:#FF72A6; --t6:#FF9A5C;
+  --good:#44DDA0; --goodbg:#10372A; --bad:#FF8C8C; --badbg:#3B1A20;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{
+  margin:0; color:var(--ink); font-family:var(--fb); font-size:17px; line-height:1.55;
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:26px 26px;
+}
+h1,h2,h3{font-family:var(--fd);font-weight:600;line-height:1.15;margin:0}
+p{margin:0}
+button{font-family:inherit}
+:focus-visible{outline:3px solid var(--c3);outline-offset:3px;border-radius:6px}
+img,svg{max-width:100%}
+.muted{color:var(--muted)}
+.hidden{display:none!important}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--paper);border-bottom:2.5px solid var(--edge)}
+.topbar-in{max-width:1060px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;background:none;border:0;color:var(--ink);cursor:pointer;font:600 1.15rem var(--fd);padding:4px}
+.brand .mark{display:grid;grid-template-columns:repeat(3,11px);gap:3px}
+.brand .mark i{display:block;width:11px;height:22px;border-radius:3px}
+.starcount{font:600 1rem var(--fd);background:var(--card);border:2px solid var(--edge);border-radius:999px;padding:4px 14px;white-space:nowrap}
+.starcount b{color:var(--t1)}
+.starcount.hidden{display:none}
+
+.wrap{max-width:1060px;margin:0 auto;padding:22px 18px 70px}
+
+/* ---------- area & perimeter ---------- */
+.apsvg{display:block;max-width:100%;height:auto;color:var(--ink);font-family:var(--fb)}
+.apstage{display:flex;justify-content:center;align-items:center;min-height:200px;background:var(--soft);border-radius:16px;padding:14px}
+.btn.ap-a{background:var(--c0);color:#fff}
+.btn.ap-p{background:var(--c6);color:#fff}
+.aplist{display:flex;gap:14px;align-items:stretch;min-width:min-content}
+.apcard{background:var(--soft);border:2.5px solid var(--line);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;min-width:120px}
+.apcard.tagged{border-color:var(--edge)}
+.aptag{font:600 .82rem var(--fd);background:var(--ink);color:var(--paper);border-radius:999px;padding:2px 10px;margin-top:4px}
+
+/* ---------- area site ---------- */
+.apbig{display:flex;flex-direction:column;gap:2px;border-radius:16px;padding:16px 18px;border:2.5px solid var(--edge);color:#10202F}
+.apbig b{font:700 1.5rem var(--fd)}
+.apbig em{font-style:normal;font-weight:700;margin-top:4px}
+.ap-area{background:color-mix(in srgb,var(--c0) 55%,#fff)}
+.ap-perim{background:color-mix(in srgb,var(--c6) 45%,#fff)}
+.sortgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin:10px 0}
+.sortcard{display:flex;flex-direction:column;gap:10px;padding:14px;border:2.5px solid var(--line);border-radius:16px;background:var(--soft)}
+.sortcard b{font:600 1.05rem var(--fd)}
+.sortcard.is-area{border-color:var(--c0);background:color-mix(in srgb,var(--c0) 18%,var(--card))}
+.sortcard.is-perim{border-color:var(--c6);background:color-mix(in srgb,var(--c6) 16%,var(--card))}
+.sortfb{font-size:.95rem;color:var(--muted);min-height:1.3em}
+.btn.small{padding:6px 14px;font-size:.95rem}
+.btn.wrong{border-color:var(--bad);background:var(--badbg)}
+.padwrap{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:10px}
+.padbox{background:var(--soft);border-radius:16px;padding:10px;display:inline-block}
+.apsvg.pad rect{cursor:pointer}
+.padread{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;font:600 1.1rem var(--fd);min-height:2.4em;align-items:center}
+.padread .pa,.padread .pp{border-radius:999px;padding:6px 16px;color:#10202F}
+.padread .pa{background:color-mix(in srgb,var(--c0) 45%,#fff)}
+.padread .pp{background:color-mix(in srgb,var(--c6) 40%,#fff)}
+
+/* ---------- multi-step ---------- */
+.method{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}
+@media (max-width:640px){.method{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.mstep{border:2.5px solid var(--edge);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;background:var(--soft)}
+.mstep b{font:600 1.05rem var(--fd)}
+.mstep span{font-size:.88rem;color:var(--muted)}
+.trail{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:12px}
+.tnode{min-width:96px;border:2.5px dashed var(--line);border-radius:14px;padding:8px 12px;display:flex;flex-direction:column;align-items:center;background:var(--card);transition:background .3s ease,border-color .3s ease}
+.tnode b{font:700 1.6rem var(--fd);line-height:1.1;font-variant-numeric:tabular-nums}
+.tnode span{font-size:.78rem;color:var(--muted);text-align:center}
+.tnode.now{border-color:var(--c1);border-style:solid}
+.tnode.done{border-style:solid;border-color:var(--edge);background:color-mix(in srgb,var(--c0) 22%,var(--card));animation:pop .3s ease}
+.tnode.done.last{background:color-mix(in srgb,var(--c1) 40%,var(--card))}
+.tarrow{font:700 1.4rem var(--fd);color:var(--muted)}
+.plan{margin:0 0 12px;padding-left:1.4em;display:grid;gap:6px}
+.plan li{background:var(--soft);border-radius:10px;padding:7px 12px}
+.plan li span{color:var(--muted);margin-right:10px}
+.plan li b{font-weight:600}
+.ask{font-weight:600;font-size:1.08rem;margin:10px 0}
+.mwork .choice{text-align:left;justify-content:flex-start;font-size:1.02rem}
+
+/* ---------- learners & progress ---------- */
+.top-right{display:flex;align-items:center;gap:10px}
+.who{font:600 1rem var(--fd);color:var(--paper);background:var(--ink);border:2px solid var(--edge);border-radius:999px;padding:5px 14px;cursor:pointer;max-width:40vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-height:38px}
+.welcome{max-width:620px;margin:0 auto 24px}
+.welcome h2{margin-bottom:12px}
+.learners{display:grid;gap:10px;margin-bottom:18px}
+.learner{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:12px 16px;background:var(--card);color:var(--ink);border:2.5px solid var(--edge);border-radius:14px;box-shadow:3px 3px 0 var(--shadow);cursor:pointer;font:inherit}
+.learner:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--shadow)}
+.l-name{font:600 1.25rem var(--fd)}
+.l-meta{font-size:.88rem;color:var(--muted)}
+.or{font-size:1.05rem;margin-bottom:10px}
+.name-in{width:14ch}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:24px}
+.stat{margin:0;display:flex;flex-direction:column;align-items:flex-start;padding:16px 18px}
+.stat b{font:700 2rem var(--fd)}
+.stat span{color:var(--muted);font-size:.92rem}
+@media (max-width:560px){.stats{grid-template-columns:1fr}}
+.ptable{width:100%;border-collapse:collapse;min-width:420px}
+.ptable th,.ptable td{text-align:left;padding:9px 10px;border-bottom:1.5px solid var(--line)}
+.ptable th{font:600 .9rem var(--fd);color:var(--muted)}
+.skills,.recent{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.skills li{display:flex;gap:10px;align-items:baseline;padding:8px 12px;background:var(--soft);border-radius:10px}
+.skills li span:first-child{flex:1}
+.recent li{display:grid;grid-template-columns:minmax(120px,auto) 1fr auto auto;gap:12px;align-items:baseline;padding:8px 12px;background:var(--soft);border-radius:10px}
+@media (max-width:560px){.recent li{grid-template-columns:1fr auto}}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font:600 1.02rem var(--fd);color:var(--ink);background:var(--card);
+  border:2.5px solid var(--edge);border-radius:12px;padding:9px 18px;cursor:pointer;
+  box-shadow:3px 3px 0 var(--shadow);transition:transform .08s ease,box-shadow .08s ease;
+  min-height:46px;
+}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--shadow)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--shadow)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:3px 3px 0 var(--shadow)}
+.btn.go{background:var(--c3);color:#fff}
+.btn.big{font-size:1.2rem;padding:12px 26px}
+.btn.ghost{box-shadow:none;border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--edge)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.chip{font:600 .95rem var(--fd);color:var(--ink);background:var(--card);border:2px solid var(--line);border-radius:999px;padding:7px 15px;cursor:pointer;min-height:40px}
+.chip:hover{border-color:var(--edge)}
+.chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.round{width:44px;height:44px;border-radius:50%;border:2.5px solid var(--edge);background:var(--card);color:var(--ink);font:700 1.4rem var(--fd);cursor:pointer;box-shadow:2px 2px 0 var(--shadow);line-height:1;display:grid;place-items:center}
+.round:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--shadow)}
+
+/* ---------- panels ---------- */
+.panel{background:var(--card);border:2.5px solid var(--edge);border-radius:20px;box-shadow:5px 5px 0 var(--shadow);padding:22px;margin-bottom:24px}
+.panel h2{font-size:1.45rem;margin-bottom:6px}
+.hint{color:var(--muted);max-width:68ch;margin-bottom:6px}
+.scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px}
+
+/* ---------- home ---------- */
+.hero{text-align:center;padding:10px 0 8px}
+.hero h1{font-size:clamp(2.1rem,6vw,3.4rem);font-weight:700;letter-spacing:-.01em}
+.lede{color:var(--muted);max-width:52ch;margin:10px auto 22px;font-size:1.05rem}
+.odo-card{display:inline-block;max-width:100%;padding:22px 20px 18px}
+.odo{display:flex;justify-content:center;align-items:flex-start;gap:8px}
+.wheel{display:flex;flex-direction:column;align-items:center;gap:6px;width:clamp(44px,12vw,78px)}
+.face{width:100%;height:clamp(62px,15vw,96px);border-radius:14px;background:var(--wc);color:#fff;font:700 clamp(2.1rem,8vw,3.6rem) var(--fd);display:grid;place-items:center;border:2.5px solid var(--edge);box-shadow:3px 3px 0 var(--shadow)}
+.face.dark{color:#3A2A00}
+.spin{width:100%;min-height:34px;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font-size:.8rem;cursor:pointer}
+.spin:hover{border-color:var(--edge)}
+.wheel small{font-size:.7rem;color:var(--muted);text-align:center;line-height:1.15;min-height:2.3em}
+.comma{font:700 clamp(2rem,7vw,3.2rem) var(--fd);align-self:center;margin-top:-30px}
+.odo-say{margin-top:12px;font-size:1.05rem}
+.odo-say i{color:var(--muted)}
+.path{margin-top:34px}
+.path-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.path-head h2{font-size:1.7rem}
+.stations{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:18px}
+.station{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;text-align:left;padding:16px;background:var(--card);color:var(--ink);border:2.5px solid var(--edge);border-radius:18px;box-shadow:4px 4px 0 var(--shadow);cursor:pointer;font:inherit}
+.station:hover{transform:translate(-1px,-1px);box-shadow:6px 6px 0 var(--shadow)}
+.station:active{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--shadow)}
+.sym{width:64px;height:64px;border-radius:16px;background:var(--sc);color:var(--st,#fff);display:grid;place-items:center;font:700 1.7rem var(--fd);border:2.5px solid var(--edge)}
+.sym.sm{width:52px;height:52px;font-size:1.4rem;border-radius:14px}
+.st-body{display:flex;flex-direction:column;gap:1px}
+.st-stop{font-size:.8rem;color:var(--muted)}
+.st-title{font:600 1.18rem var(--fd)}
+.st-desc{font-size:.9rem;color:var(--muted);line-height:1.35}
+.stars{font-size:1.15rem;letter-spacing:2px;margin-top:3px}
+.stars .on{color:var(--t1)}
+.stars .off{color:var(--line)}
+
+/* ---------- module header ---------- */
+.mod-head{display:flex;align-items:center;flex-wrap:wrap;gap:14px 20px;margin-bottom:22px}
+.mod-title{display:flex;align-items:center;gap:12px;flex:1 1 260px}
+.mod-title h1{font-size:clamp(1.6rem,4.5vw,2.2rem)}
+.tabs{display:inline-flex;background:var(--card);border:2.5px solid var(--edge);border-radius:14px;padding:4px;gap:4px}
+.tab{font:600 1.05rem var(--fd);border:0;background:none;color:var(--ink);padding:8px 22px;border-radius:10px;cursor:pointer;min-height:42px}
+.tab.on{background:var(--ink);color:var(--paper)}
+.next-cta{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;padding:8px 0 10px;font:600 1.15rem var(--fd)}
+
+/* ---------- place value ---------- */
+.readout{text-align:center;font:700 clamp(2.6rem,9vw,4.4rem) var(--fd);letter-spacing:.02em;margin:10px 0 14px;font-variant-numeric:tabular-nums}
+.readout .cm{color:var(--muted)}
+.pv-chart{display:grid;grid-template-columns:repeat(6,minmax(122px,1fr));gap:10px;min-width:780px}
+.pv-col{border:2.5px solid var(--pc);border-radius:16px;background:var(--card);display:flex;flex-direction:column;overflow:hidden}
+.pv-col.bump{animation:bump .6s ease}
+@keyframes bump{0%,100%{transform:none}35%{transform:translateY(-7px) scale(1.03)}}
+.pv-head{background:var(--pc);color:#fff;text-align:center;padding:7px 4px;line-height:1.2}
+.pv-head b{display:block;font:600 .95rem var(--fd)}
+.pv-head span{font-size:.72rem;opacity:.92}
+.pv-col[data-p="1"] .pv-head{color:#3A2A00}
+.discs{min-height:176px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-content:flex-start;padding:12px 8px}
+.disc{width:42px;height:42px;border-radius:50%;background:var(--pc);color:#fff;display:grid;place-items:center;font:600 .74rem var(--fb);box-shadow:inset 0 -3px 0 rgba(0,0,0,.2);animation:pop .22s ease}
+.disc.small{font-size:.62rem}
+.disc.tiny{font-size:.52rem;letter-spacing:-.02em}
+.pv-col[data-p="1"] .disc,.disc.gold{color:#3A2A00}
+.disc.big{width:56px;height:56px;font-size:.85rem;flex:none}
+@keyframes pop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+.pv-ctrl{display:flex;justify-content:center;align-items:center;gap:10px;padding:10px;border-top:2px solid var(--soft)}
+.pv-count{font:700 1.5rem var(--fd);min-width:1.2em;text-align:center}
+.forms{margin-top:16px;display:grid;gap:8px}
+.form-row{display:grid;grid-template-columns:150px 1fr;gap:12px;padding:10px 14px;background:var(--soft);border-radius:12px;align-items:baseline}
+.form-row span{color:var(--muted);font-size:.92rem}
+.form-row b{font-weight:600}
+@media (max-width:560px){.form-row{grid-template-columns:1fr;gap:2px}}
+.inline-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:10px 0}
+.nl svg{display:block;width:100%;max-width:640px;margin:8px auto;color:var(--ink)}
+.explain{background:var(--soft);border-radius:14px;padding:12px 16px;max-width:72ch}
+
+/* ---------- inputs ---------- */
+.ans{font:600 1.45rem var(--fb);width:9ch;padding:8px 12px;border:2.5px solid var(--edge);border-radius:12px;background:var(--card);color:var(--ink);font-variant-numeric:tabular-nums}
+.ans.sm{width:8ch;font-size:1.15rem;padding:6px 10px}
+.ans.right{border-color:var(--good);background:var(--goodbg)}
+.ans.wrong{border-color:var(--bad);background:var(--badbg)}
+.own{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:4px 0 16px;color:var(--muted)}
+.own .op{font:700 1.3rem var(--fd);color:var(--ink)}
+
+/* ---------- column lab (add / sub / mul) ---------- */
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:18px;align-items:start}
+@media (max-width:780px){.split{grid-template-columns:1fr}}
+.vcard{background:var(--soft);border-radius:16px;padding:18px 14px;display:flex;justify-content:center}
+.vgrid{display:inline-grid;font:600 clamp(1.45rem,4.6vw,2.05rem) var(--fb);font-variant-numeric:tabular-nums}
+.vc{width:var(--cw);height:1.55em;display:grid;place-items:center;border-radius:8px;position:relative}
+.vc.on{background:color-mix(in srgb,var(--c1) 30%,transparent)}
+.vc.lbl{font-size:.42em;height:1.4em;color:var(--pc,var(--muted));font-weight:700}
+.vc.carry{font-size:.55em;height:1.25em;color:var(--pcx,var(--c2));font-weight:700}
+.vc.opc{font-weight:700}
+.vc.res{color:var(--t3)}
+.vc.struck::after{content:"";position:absolute;left:18%;right:18%;top:50%;border-top:3px solid var(--c2);transform:rotate(-20deg)}
+.vc.struck{color:var(--muted)}
+.vline{border-top:3.5px solid var(--ink);margin:3px 0}
+.sidecard{display:flex;flex-direction:column;gap:12px}
+.say{font-size:1.06rem;max-width:62ch}
+.say.done{background:var(--goodbg);border-radius:12px;padding:10px 14px}
+.step-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.progress{font-size:.85rem;color:var(--muted)}
+.dotsvis{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:var(--soft);border-radius:14px;padding:12px}
+.dot{width:18px;height:18px;border-radius:50%;background:var(--pc,var(--c0));display:inline-block;flex:none}
+.dot.gone{background:transparent;border:2.5px dashed var(--pc,var(--c0));opacity:.7}
+.ring{display:grid;grid-template-columns:repeat(5,18px);gap:5px;border:3px dashed var(--ink);border-radius:14px;padding:7px}
+.rest{display:flex;flex-wrap:wrap;gap:5px;max-width:260px}
+.arrow{font:700 1.6rem var(--fd)}
+.cap{width:100%;font-size:.92rem;color:var(--muted)}
+
+/* ---------- skip counting ---------- */
+.numline{display:block;min-width:640px;width:100%;color:var(--ink)}
+.frog{transition:transform .5s ease-in-out}
+.frog-in.jump{animation:arc .5s ease-in-out}
+@keyframes arc{50%{transform:translateY(-48px)}}
+.hundred{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;max-width:470px}
+.hundred span{aspect-ratio:1;display:grid;place-items:center;font-size:.8rem;border-radius:7px;background:var(--soft);color:var(--muted)}
+.hundred span.hit{background:color-mix(in srgb,var(--c0) 35%,var(--card));color:var(--ink);font-weight:600}
+.hundred span.reached{background:var(--c0);color:#fff;font-weight:700}
+
+/* ---------- multiplication ---------- */
+.array{display:grid;gap:7px;justify-content:start;padding:14px;background:var(--soft);border-radius:16px;width:max-content;max-width:100%;transition:transform .35s ease}
+.array.spin{transform:rotate(90deg) scale(.85)}
+.array .dot{width:22px;height:22px}
+.array.small .dot{width:16px;height:16px}
+.sliders{display:grid;grid-template-columns:auto 1fr auto;gap:8px 12px;align-items:center;max-width:460px;margin:10px 0}
+.sliders input[type=range]{width:100%;accent-color:var(--c4);height:30px}
+.eq{font:700 clamp(1.5rem,5vw,2.1rem) var(--fd)}
+.groups{display:flex;flex-direction:column;gap:6px}
+.grp{display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--soft);border-radius:12px;flex-wrap:wrap}
+.grp b{font:600 .95rem var(--fd);min-width:2.4em}
+.rod{width:11px;height:48px;border-radius:3px;background-color:var(--c1);border:1.5px solid rgba(0,0,0,.28);background-image:repeating-linear-gradient(to bottom,transparent 0 3.5px,rgba(0,0,0,.26) 3.5px 4.6px);flex:none;display:inline-block}
+.rod.sm{height:34px;width:9px}
+.odot{width:13px;height:13px;border-radius:50%;background:var(--c0);flex:none;display:inline-block}
+.odot.new{animation:pop .35s ease}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+@media (max-width:780px){.two-col{grid-template-columns:1fr}}
+
+/* ---------- division ---------- */
+.bank{border:2.5px dashed var(--line);border-radius:16px;padding:12px 14px;min-height:96px;display:flex;flex-wrap:wrap;gap:6px;align-items:flex-end}
+.bank-label{width:100%;font-size:.88rem;color:var(--muted)}
+.plates{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:14px;margin:16px 0}
+.plate{position:relative;border-radius:50%;aspect-ratio:1;border:3px solid var(--line);background:var(--soft);display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:4px;padding:20px 18px 26px}
+.plate small{position:absolute;bottom:9px;left:0;right:0;text-align:center;font-size:.72rem;color:var(--muted)}
+.tri svg{width:220px;height:auto;display:block;color:var(--ink)}
+.facts{display:grid;grid-template-columns:repeat(2,max-content);gap:8px 22px;font:600 1.3rem var(--fd)}
+
+/* ---------- word problems ---------- */
+.story{font-size:1.2rem;line-height:1.6;max-width:62ch;background:var(--soft);border-radius:16px;padding:16px 18px}
+.ops{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:16px 0}
+@media (max-width:560px){.ops{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.op-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 6px}
+.op-btn span{font:700 2rem var(--fd);line-height:1}
+.op-btn.right{background:var(--goodbg);border-color:var(--good)}
+.op-btn.wrong{background:var(--badbg);border-color:var(--bad)}
+.bar{display:flex;flex-direction:column;gap:6px;margin:12px 0;max-width:640px}
+.bar-row{display:flex;gap:4px}
+.seg{border:2.5px solid var(--edge);border-radius:8px;padding:8px 4px;text-align:center;font:600 .95rem var(--fb);min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.seg.q{border-style:dashed;background:var(--card)}
+.seg.partial{opacity:.55;border-style:dashed}
+.brace{text-align:center;font:600 .95rem var(--fb);color:var(--muted);border-top:2.5px solid var(--muted);border-radius:0 0 12px 12px;padding-top:4px}
+
+/* ---------- quiz ---------- */
+.quiz{max-width:760px;margin:0 auto 24px}
+.qtop{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.qdots{display:flex;gap:7px;flex-wrap:wrap}
+.qdots span{width:16px;height:16px;border-radius:50%;border:2.5px solid var(--edge);background:var(--card)}
+.qdots span.cur{background:var(--c1)}
+.qdots span.ok{background:var(--good);border-color:var(--good)}
+.qdots span.no{background:var(--bad);border-color:var(--bad)}
+.qprompt{font-size:clamp(1.15rem,3.4vw,1.4rem);line-height:1.55;margin-bottom:14px}
+.qprompt b{font-weight:600}
+.qvisual{margin:6px 0 16px}
+.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.choice{font:600 1.15rem var(--fb);padding:14px 10px;min-height:58px}
+.choice.right{background:var(--goodbg);border-color:var(--good)}
+.choice.wrong{background:var(--badbg);border-color:var(--bad)}
+.answer-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.answer-row .pre{font:700 1.3rem var(--fd)}
+.answer-row .unit{color:var(--muted)}
+.feedback:empty{display:none}
+.feedback{margin-top:18px;border-radius:14px;padding:14px 16px;border:2.5px solid;font-size:1.02rem}
+.feedback.good{background:var(--goodbg);border-color:var(--good)}
+.feedback.bad{background:var(--badbg);border-color:var(--bad)}
+.fb-actions{margin-top:12px}
+.stack{display:inline-flex;flex-direction:column;align-items:flex-end;font:600 1.8rem var(--fb);font-variant-numeric:tabular-nums;letter-spacing:.16em;background:var(--soft);border-radius:14px;padding:10px 18px}
+.srow{display:flex;gap:.5em}
+.sline{border-top:3.5px solid var(--ink);align-self:stretch;margin-top:4px;height:1.3em}
+.blank{display:inline-block;width:3.4em;height:1.35em;border:2.5px solid var(--edge);border-radius:8px;vertical-align:middle;background:var(--card)}
+.result{text-align:center;max-width:620px;margin:0 auto}
+.big-stars{font-size:3.6rem;letter-spacing:6px;line-height:1.1;margin-bottom:8px}
+.big-stars .on{color:var(--t1)}
+.big-stars .off{color:var(--line)}
+.result h2{font-size:2rem;margin-bottom:6px}
+.result-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:18px}
+
+/* ---------- toast & confetti ---------- */
+.toast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 74px);transform:translate(-50%,-12px);opacity:0;pointer-events:none;background:var(--ink);color:var(--paper);font:600 1rem var(--fd);padding:11px 20px;border-radius:999px;z-index:60;transition:opacity .2s ease,transform .2s ease;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:70;overflow:hidden}
+.confetti i{position:absolute;top:-16px;width:10px;height:14px;border-radius:2px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
+
+@media (max-width:560px){
+  body{font-size:16px}
+  .panel{padding:16px;border-radius:16px;box-shadow:4px 4px 0 var(--shadow)}
+  .choices{grid-template-columns:1fr}
+  .wheel small{font-size:.6rem}
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-in">
+    <button class="brand" id="brand" aria-label="Go to the start page">
+      <span class="mark" aria-hidden="true"><i style="background:var(--c0)"></i><i style="background:var(--c6)"></i><i style="background:var(--c3)"></i></span>
+      Area &amp; Perimeter
+    </button>
+    <div class="top-right">
+      <div class="starcount" id="starcount" aria-live="polite"></div>
+      <button class="who hidden" id="who" aria-label="See progress or switch learner"></button>
+    </div>
+  </div>
+</header>
+<main class="wrap" id="app"></main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="confetti" id="confetti" aria-hidden="true"></div>
+
+<script>
+/* =====================================================================
+   TUTOR SETTINGS: send quiz results to your Google Sheet
+   Paste the Web app URL from Google Apps Script between the quotes,
+   and use the same secret word you set in the script.
+   Leave SHEET_URL empty to keep results on the student's device only.
+   ===================================================================== */
+var SHEET_URL = '';
+var SHEET_KEY = 'change-me';
+</script>
+<script>
+(function(){
+'use strict';
+
+/* ================= helpers ================= */
+var app = document.getElementById('app');
+function h(tag, attrs){
+  var e = document.createElement(tag);
+  if (attrs) for (var k in attrs){
+    var v = attrs[k];
+    if (v == null || v === false) continue;
+    if (k === 'class') e.className = v;
+    else if (k === 'html') e.innerHTML = v;
+    else if (k === 'style') e.style.cssText = v;
+    else if (k.slice(0,2) === 'on') e.addEventListener(k.slice(2), v);
+    else e.setAttribute(k, v === true ? '' : v);
+  }
+  var kids = Array.prototype.slice.call(arguments, 2);
+  (function add(list){
+    list.forEach(function(x){
+      if (x == null || x === false) return;
+      if (Array.isArray(x)) return add(x);
+      e.append(x.nodeType ? x : document.createTextNode(String(x)));
+    });
+  })(kids);
+  return e;
+}
+var fmt = function(n){ return Number(n).toLocaleString('en-US'); };
+var rnd = function(a,b){ return a + Math.floor(Math.random()*(b-a+1)); };
+var pick = function(a){ return a[Math.floor(Math.random()*a.length)]; };
+var shuffle = function(a){ a = a.slice(); for (var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; };
+var times = function(n, f){ var o=[]; for (var i=0;i<n;i++) o.push(f(i)); return o; };
+var MINUS='\u2212', TIMES='\u00d7', DIVS='\u00f7';
+var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+var PV = [
+  {n:'ones', one:'one', lab:'1', ab:'O', v:1},
+  {n:'tens', one:'ten', lab:'10', ab:'T', v:10},
+  {n:'hundreds', one:'hundred', lab:'100', ab:'H', v:100},
+  {n:'thousands', one:'thousand', lab:'1,000', ab:'Th', v:1000},
+  {n:'ten thousands', one:'ten thousand', lab:'10,000', ab:'TTh', v:10000},
+  {n:'hundred thousands', one:'hundred thousand', lab:'100,000', ab:'HTh', v:100000}
+];
+var POS = {10:1, 100:2, 1000:3, 10000:4};
+var cap = function(s){ return s.charAt(0).toUpperCase() + s.slice(1); };
+function digitsOf(n, len){ var s=String(n), d=[]; for (var i=s.length-1;i>=0;i--) d.push(+s[i]); if (len) while (d.length<len) d.push(0); return d; }
+function colored(n){
+  var s=String(n), out='';
+  for (var i=0;i<s.length;i++){ var p=s.length-1-i; out += '<span style="color:var(--t'+Math.min(p,5)+')">'+s[i]+'</span>'; if (p>0 && p%3===0) out += '<span class="cm">,</span>'; }
+  return out;
+}
+var ONES=['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'];
+var TENS=['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
+function w100(n){ return n<20 ? ONES[n] : TENS[Math.floor(n/10)] + (n%10 ? '-'+ONES[n%10] : ''); }
+function w1000(n){ var hh=Math.floor(n/100), r=n%100, s = hh ? ONES[hh]+' hundred' : ''; if (r) s += (s?' ':'') + w100(r); return s; }
+function words(n){ if (n===0) return 'zero'; var th=Math.floor(n/1000), r=n%1000, s = th ? w1000(th)+' thousand' : ''; if (r) s += (s?', ':'') + w1000(r); return s; }
+function expanded(n){ var d=digitsOf(n), parts=[]; for (var p=d.length-1;p>=0;p--) if (d[p]) parts.push(fmt(d[p]*Math.pow(10,p))); return parts.join(' + ') || '0'; }
+function randNum(digits, zeros){ var s=String(rnd(1,9)); for (var i=1;i<digits;i++) s += (zeros && Math.random()<zeros) ? '0' : String(rnd(0,9)); return +s; }
+function carries(a,b){ var c=0,n=0; while (a||b){ var s=a%10+b%10+c; c = s>=10?1:0; n+=c; a=Math.floor(a/10); b=Math.floor(b/10); } return n; }
+function borrows(a,b){ var br=0,n=0; while (a||b){ var d=a%10-b%10-br; br = d<0?1:0; n+=br; a=Math.floor(a/10); b=Math.floor(b/10); } return n; }
+function starsHTML(n){ var s=''; for (var i=0;i<3;i++) s += '<span class="'+(i<n?'on':'off')+'">\u2605</span>'; return s; }
+function parseNum(v){ return v.replace(/[,\s]/g,''); }
+
+var toastTimer;
+function toast(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(function(){ t.classList.remove('show'); }, 2300); }
+function confetti(){
+  if (reduceMotion) return;
+  var c=document.getElementById('confetti'); c.innerHTML='';
+  var cols=['var(--c0)','var(--c1)','var(--c2)','var(--c3)','var(--c4)','var(--c5)'];
+  for (var i=0;i<70;i++){ var p=document.createElement('i'); p.style.left=(Math.random()*100)+'vw'; p.style.background=cols[i%6]; p.style.animationDelay=(Math.random()*.5)+'s'; p.style.animationDuration=(1.5+Math.random()*1.2)+'s'; c.appendChild(p); }
+  setTimeout(function(){ c.innerHTML=''; }, 3200);
+}
+
+/* ================= learners & saved progress ================= */
+/* Progress is kept per learner. It always saves in this browser, and when the page runs
+   inside Claude with its database available it also saves there, so it follows the learner
+   to any device where the page is opened while signed in. */
+var LS_KEY='area-workshop-v1', LS_CUR='area-workshop-current';
+var learners={}, currentId=null;
+var cloud={db:null, writable:true, ready:false};
+var writeChain={};
+function esc(t){ return String(t).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function lsLoad(){
+  try { var o=JSON.parse(localStorage.getItem(LS_KEY)||'{}'); learners=(o && o.students) || {}; } catch(e){ learners={}; }
+  try { currentId=localStorage.getItem(LS_CUR); } catch(e){ currentId=null; }
+  if (!learners[currentId]) currentId=null;
+}
+function lsSave(){
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify({students:learners}));
+    if (currentId) localStorage.setItem(LS_CUR, currentId); else localStorage.removeItem(LS_CUR);
+  } catch(e){}
+}
+function me(){ return currentId ? learners[currentId] || null : null; }
+function learnerName(){ var s=me(); return s ? s.name : 'Sam'; }
+function bestOf(mid, s){ s = s || me(); return (s && s.best && s.best[mid]) || 0; }
+function totalStars(s){ var t=0; MODULES.forEach(function(m){ t += bestOf(m.id, s); }); return t; }
+function newLearner(name){
+  var base=name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,24) || 'learner';
+  return {id:base+'-'+Math.random().toString(36).slice(2,7), name:name, createdAt:Date.now(), updatedAt:Date.now(), best:{}, plays:{}, attempts:[], skills:{}};
+}
+function cloudSet(s){
+  var body=JSON.parse(JSON.stringify(s));
+  return cloud.db.collection('students').doc(s.id).set(body);
+}
+function cloudWrite(s){
+  if (!cloud.db || !cloud.writable) return;
+  var prev = writeChain[s.id] || Promise.resolve();
+  writeChain[s.id] = prev.then(function(){ return cloudSet(s); }).catch(function(e){
+    if (e && e.code==='unavailable'){
+      return new Promise(function(r){ setTimeout(r, 700+Math.random()*900); }).then(function(){ return cloudSet(s); }).catch(onWriteFail);
+    }
+    onWriteFail(e);
+  });
+}
+function onWriteFail(e){
+  if (!cloud.writable) return;
+  cloud.writable=false;
+  toast(e && e.code==='quota_exceeded' ? 'The progress store is full. Progress is saved on this device only.' : 'Progress is saved on this device only.');
+  refreshChrome();
+}
+function persist(s){ s.updatedAt=Date.now(); learners[s.id]=s; lsSave(); cloudWrite(s); refreshChrome(); }
+function removeLearner(id){
+  delete learners[id]; if (currentId===id) currentId=null; lsSave();
+  if (cloud.db && cloud.writable) cloud.db.collection('students').doc(id).delete().catch(function(){});
+  refreshChrome();
+}
+function selectLearner(id){ currentId=id; lsSave(); refreshChrome(); go('home'); }
+function recordResult(mid, score, total, stars, qs, results){
+  var s=me(); if (!s) return;
+  s=JSON.parse(JSON.stringify(s));
+  s.best=s.best||{}; s.plays=s.plays||{}; s.skills=s.skills||{}; s.attempts=s.attempts||[];
+  if (stars>(s.best[mid]||0)) s.best[mid]=stars;
+  s.plays[mid]=(s.plays[mid]||0)+1;
+  var missed=[];
+  qs.forEach(function(q,i){ if (!q.key) return; var k=s.skills[q.key]||{r:0,w:0}; if (results[i]) k.r++; else { k.w++; missed.push(q.key); } s.skills[q.key]=k; });
+  s.attempts=s.attempts.concat([{m:mid, score:score, total:total, stars:stars, at:Date.now(), missed:missed}]).slice(-80);
+  persist(s);
+}
+function refreshChrome(){
+  var s=me(), sc=document.getElementById('starcount'), who=document.getElementById('who');
+  if (s){
+    sc.innerHTML='<b>\u2605</b> '+totalStars(s)+' of '+(MODULES.length*3);
+    who.textContent=s.name; who.classList.remove('hidden');
+    sc.classList.remove('hidden');
+  } else { sc.classList.add('hidden'); who.classList.add('hidden'); }
+}
+function initCloud(){
+  if (!(window.claude && typeof window.claude.use==='function')) return;
+  window.claude.use('db').then(function(db){
+    if (!db) return;
+    cloud.db=db;
+    db.collection('students').onSnapshot(function(snap){
+      var first=!cloud.ready, seen={}, pushBack=[];
+      snap.docChanges().forEach(function(ch){
+        var c=ch.doc.data(); var id=ch.doc.id;
+        if (ch.type==='removed'){ if (!first) delete learners[id]; return; }
+        if (!c || !c.name) return;
+        var l=learners[id];
+        if (!l || (c.updatedAt||0)>=(l.updatedAt||0)) learners[id]=JSON.parse(JSON.stringify(c));
+        else if (first) pushBack.push(l);
+      });
+      snap.docs.forEach(function(d){ seen[d.id]=1; });
+      if (first){
+        cloud.ready=true;
+        Object.keys(learners).forEach(function(id){ if (!seen[id]) pushBack.push(learners[id]); });
+        pushBack.forEach(cloudWrite);
+      }
+      if (!learners[currentId]) currentId=null;
+      lsSave(); onDataChanged();
+    }, function(){ /* keep working from this device */ });
+  }).catch(function(){});
+}
+function onDataChanged(){
+  refreshChrome();
+  var v=location.hash.replace('#','').split('/')[0];
+  if (v==='' || v==='home' || v==='welcome' || v==='progress') route(true);
+}
+/* ---------- results to Google Sheet (queued, so nothing is lost offline) ---------- */
+var OUTBOX='area-workshop-outbox', flushing=false;
+function sheetOn(){ return typeof SHEET_URL==='string' && /^https:\/\/script\.google(usercontent)?\.com\//.test(SHEET_URL.trim()); }
+function outboxLoad(){ try { return JSON.parse(localStorage.getItem(OUTBOX)||'[]') || []; } catch(e){ return []; } }
+function outboxSave(a){ try { localStorage.setItem(OUTBOX, JSON.stringify(a.slice(-300))); } catch(e){} }
+function flushOutbox(){
+  if (!sheetOn() || flushing || !window.fetch) return;
+  var box=outboxLoad(); if (!box.length) return;
+  flushing=true;
+  var row=box[0];
+  window.fetch(SHEET_URL.trim(), {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(row)})
+    .then(function(){
+      outboxSave(outboxLoad().filter(function(r){ return r.uid!==row.uid; }));
+      flushing=false; flushOutbox();
+    })
+    .catch(function(){ flushing=false; setTimeout(flushOutbox, 60000); });
+}
+function queueResult(s, m, score, total, stars, missedKeys){
+  if (!sheetOn() || !s) return;
+  var box=outboxLoad();
+  box.push({uid:Date.now().toString(36)+Math.random().toString(36).slice(2,7), key:SHEET_KEY,
+    learner:s.name, learnerId:s.id, stop:'A&P '+m.n+'. '+m.title, score:score, total:total, stars:stars,
+    missed:missedKeys.map(function(k){ return SKILL[k]||k; }), finishedAt:new Date().toLocaleString()});
+  outboxSave(box); flushOutbox();
+}
+window.addEventListener('online', flushOutbox);
+
+var SKILL={pvValue:'Value of a digit',pvStandard:'Expanded form to standard form',pvCompare:'Comparing numbers',pvRound:'Rounding',pvWords:'Number names in words',pvMoreLess:'10, 100, 1,000 more or less',
+  addCompute:'Adding with carrying',addNoCarry:'Adding without carrying',addEstimate:'Estimating a sum',addMissing:'Missing number in addition',addError:'Fixing a carrying mistake',addFirstCarry:'Spotting where to carry',
+  subCompute:'Subtracting with borrowing',subZeros:'Borrowing across zeros',subCheck:'Checking subtraction with addition',subMissing:'Missing number in subtraction',subRight:'Checking someone else\u2019s subtraction',
+  skipNext:'Skip counting forward',skipBack:'Skip counting backward',skipRule:'Finding a pattern rule',skipNotSaid:'Which numbers get skipped',skipTimes:'Skip counting to multiply',
+  mulFact:'Times table facts',mulArray:'Reading an array',mulBreak:'Break-apart multiplying',mul2x1:'2-digit \u00d7 1-digit',mulTurn:'Turn-around facts',mulWord:'Multiplication story problems',
+  divFact:'Division facts',div2:'2-digit \u00f7 1-digit',divRem:'Division with remainders',divNotRem:'The remainder rule',divCars:'What to do with a remainder',divFamily:'Fact families',divMissing:'Missing number in division',
+  apCount:'Area by counting squares',apArea:'Area of a rectangle',apPerim:'Perimeter of a rectangle',apSquare:'Squares: area and perimeter',apChoose:'Choosing area or perimeter',apMissArea:'Missing side from the area',apMissPerim:'Missing side from the perimeter',apSame:'Same area, different perimeter',apL:'Area of an L-shape',apLPerim:'Perimeter of an L-shape',apWord:'Area and perimeter story problems',
+  msSolve:'Solving multi-step stories',msFirst:'Choosing the first step',msPlan:'Planning the steps',
+  wordOp:'Choosing the operation',wordSolve:'Solving story problems'};
+
+/* ================= shared visuals ================= */
+function stackHTML(a,b,op){
+  return '<div class="stack"><div class="srow"><span></span><span>'+a+'</span></div><div class="srow"><span>'+op+'</span><span>'+b+'</span></div><div class="sline"></div></div>';
+}
+function dotsRow(n, cls){ return times(n, function(){ return h('span',{class:cls||'dot'}); }); }
+function rods(n, sm){ return times(n, function(){ return h('span',{class:'rod'+(sm?' sm':'')}); }); }
+function odots(n, isNew){ return times(n, function(){ return h('span',{class:'odot'+(isNew?' new':'')}); }); }
+function compareExplain(a,b){
+  var sa=String(a), sb=String(b);
+  if (sa.length!==sb.length) return fmt(a)+' has '+sa.length+' digits and '+fmt(b)+' has '+sb.length+'.';
+  for (var i=0;i<sa.length;i++) if (sa[i]!==sb[i]){ var p=sa.length-1-i; return 'Start at the biggest place. The first place that is different is the '+PV[p].n+': '+sa[i]+' and '+sb[i]+'.'; }
+  return 'They are the same number.';
+}
+
+/* ================= LEARN: place value ================= */
+function learnPlace(root){
+  var num = 125347, bump = -1;
+  var read=h('div',{class:'readout','aria-live':'polite'}), chart=h('div',{class:'pv-chart'}), forms=h('div',{class:'forms'});
+  root.append(h('section',{class:'panel'},
+    h('h2',{},'Build a number with place value discs'),
+    h('p',{class:'hint'},'Each disc is worth the number on it. Press + to add a disc and '+MINUS+' to take one away. When a place gets 10 discs, they trade up for 1 disc in the next place.'),
+    read, h('div',{class:'scroll-x'}, chart), forms));
+  function draw(){
+    var d = digitsOf(num,6); read.innerHTML = colored(num); chart.innerHTML='';
+    for (var p=5;p>=0;p--){
+      (function(p){
+        var lab = PV[p].lab, cls = 'disc' + (lab.length>5 ? ' tiny' : lab.length>3 ? ' small' : '');
+        chart.append(h('div',{class:'pv-col'+(p===bump?' bump':''), style:'--pc:var(--c'+p+')', 'data-p':p},
+          h('div',{class:'pv-head'}, h('b',{}, cap(PV[p].n)), h('span',{}, lab+' each')),
+          h('div',{class:'discs'}, times(d[p], function(){ return h('span',{class:cls}, lab); })),
+          h('div',{class:'pv-ctrl'},
+            h('button',{class:'round','aria-label':'Take away one '+PV[p].one, onclick:function(){ change(p,-1); }}, MINUS),
+            h('span',{class:'pv-count'}, d[p]),
+            h('button',{class:'round','aria-label':'Add one '+PV[p].one, onclick:function(){ change(p,1); }}, '+'))));
+      })(p);
+    }
+    forms.innerHTML = '<div class="form-row"><span>Standard form</span><b>'+fmt(num)+'</b></div>'+
+      '<div class="form-row"><span>Expanded form</span><b>'+expanded(num)+'</b></div>'+
+      '<div class="form-row"><span>Word form</span><b>'+words(num)+'</b></div>';
+    bump = -1;
+  }
+  function change(p, dir){
+    var d=digitsOf(num,6), v=PV[p].v, q;
+    if (dir>0){
+      if (num+v>999999){ toast('999,999 is the biggest 6-digit number.'); return; }
+      if (d[p]===9){ q=p; while (d[q]===9) q++; bump=q; toast('10 '+PV[p].n+' trade for 1 '+PV[p+1].one+'!'); }
+      num += v;
+    } else {
+      if (num-v<0){ toast('We cannot go below zero.'); return; }
+      if (d[p]===0){ q=p+1; while (d[q]===0) q++; bump=p;
+        toast(q===p+1 ? 'Break 1 '+PV[q].one+' into 10 '+PV[p].n+'.' : 'No '+PV[p+1].n+' here, so break 1 '+PV[q].one+' and pass it down.'); }
+      num -= v;
+    }
+    draw();
+  }
+  draw();
+  root.append(roundingPanel());
+}
+function roundingPanel(){
+  var n=4678, unit=100;
+  var chips=h('div',{class:'chips'}), nl=h('div',{class:'nl'}), text=h('p',{class:'explain'});
+  var inp=h('input',{type:'text',inputmode:'numeric',class:'ans sm',value:'4,678','aria-label':'Number to round'});
+  inp.addEventListener('input', function(){ var v=Number(parseNum(inp.value)); if (isFinite(v) && v>=0 && v<=999999 && inp.value.trim()!==''){ n=Math.floor(v); draw(); } });
+  function draw(){
+    chips.innerHTML='';
+    [10,100,1000,10000].forEach(function(u){ chips.append(h('button',{class:'chip'+(u===unit?' on':''), onclick:function(){ unit=u; draw(); }}, 'Nearest '+fmt(u))); });
+    var L=Math.floor(n/unit)*unit, U=L+unit, M=L+unit/2, r = n>=M ? U : L;
+    var X=function(v){ return 40+(v-L)/unit*520; }, nx=X(n);
+    var ticks=[L,M,U].map(function(v,k){ return '<line x1="'+X(v)+'" y1="'+(k===1?70:62)+'" x2="'+X(v)+'" y2="'+(k===1?90:98)+'" stroke="currentColor" stroke-width="'+(k===1?2:4)+'"/>'+
+      '<text x="'+X(v)+'" y="122" text-anchor="middle" font-size="'+(k===1?14:18)+'" font-weight="'+(k===1?400:700)+'" fill="currentColor">'+fmt(v)+'</text>'; }).join('');
+    nl.innerHTML = '<svg viewBox="0 0 600 132" role="img" aria-label="Number line from '+fmt(L)+' to '+fmt(U)+'">'+
+      '<line x1="40" y1="80" x2="560" y2="80" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>'+ticks+
+      (n!==L ? '<line x1="'+nx+'" y1="80" x2="'+X(r)+'" y2="80" stroke="var(--c3)" stroke-width="9" stroke-linecap="round" opacity=".55"/>' : '')+
+      '<circle cx="'+X(r)+'" cy="80" r="8" fill="var(--c3)"/>'+
+      '<circle cx="'+nx+'" cy="80" r="11" fill="var(--c2)" stroke="currentColor" stroke-width="2.5"/>'+
+      '<text x="'+Math.max(60,Math.min(540,nx))+'" y="40" text-anchor="middle" font-size="19" font-weight="700" fill="var(--t2)">'+fmt(n)+'</text></svg>';
+    var pos=POS[unit], dig=digitsOf(n,7)[pos-1];
+    text.innerHTML = n===L ? fmt(n)+' is already a multiple of '+fmt(unit)+', so it stays '+fmt(n)+'.' :
+      fmt(n)+' is between <b>'+fmt(L)+'</b> and <b>'+fmt(U)+'</b>. The halfway point is '+fmt(M)+'. '+
+      (n>=M ? fmt(n)+' is at or past halfway, so it rounds <b>up to '+fmt(U)+'</b>.' : fmt(n)+' is before halfway, so it rounds <b>down to '+fmt(L)+'</b>.')+
+      '<br>Shortcut: look at the '+PV[pos-1].n+' digit ('+dig+'). '+(dig>=5 ? '5 or more rounds up.' : '4 or less rounds down.');
+  }
+  draw();
+  return h('section',{class:'panel'},
+    h('h2',{},'Round on a number line'),
+    h('p',{class:'hint'},'Type a number and pick what to round to. Which end of the line is it closer to?'),
+    h('div',{class:'inline-row'}, h('label',{},'Number:'), inp), chips, nl, text);
+}
+
+/* ================= LEARN: column labs (add / sub) ================= */
+function addSteps(a,b){
+  var da=digitsOf(a), db=digitsOf(b), L=Math.max(String(a).length,String(b).length), steps=[], carry=0;
+  for (var p=0;p<L;p++){ var x=da[p]||0, y=db[p]||0, s=x+y+carry; steps.push({p:p,x:x,y:y,cin:carry,s:s,write:s%10,cout:s>=10?1:0}); carry = s>=10?1:0; }
+  if (carry) steps.push({p:L, fin:true, write:1});
+  return steps;
+}
+function subSteps(a,b){
+  var top=digitsOf(a), db=digitsOf(b), L=top.length, steps=[];
+  for (var p=0;p<L;p++){
+    var y=db[p]||0, before=top[p], borrow=null;
+    if (top[p]<y){ var j=p+1; while (top[j]===0) j++; top[j]-=1; for (var q=j-1;q>p;q--) top[q]=9; top[p]+=10; borrow={from:j}; }
+    steps.push({p:p, y:y, before:before, x:top[p], d:top[p]-y, borrow:borrow, snap:top.slice()});
+  }
+  return steps;
+}
+function gridCell(txt, cls, p, on, extra){
+  return h('div',{class:'vc '+(cls||'')+(on?' on':''), style:(p!=null ? '--pc:var(--t'+Math.min(p,5)+');' : '')+(extra||'')}, txt);
+}
+function addGrid(a,b,steps,k){
+  var L=Math.max(String(a).length,String(b).length), n=Math.max(L,String(a+b).length);
+  var da=digitsOf(a), db=digitsOf(b), cur = k>0 ? steps[k-1] : null, carryInto={}, res={};
+  steps.slice(0,k).forEach(function(s){ res[s.p]=s.write; if (!s.fin && s.cout) carryInto[s.p+1]=1; });
+  var g=h('div',{class:'vgrid', style:'grid-template-columns:repeat('+(n+1)+',var(--cw))', role:'img', 'aria-label':fmt(a)+' plus '+fmt(b)+' written in columns'});
+  var on=function(p){ return cur && cur.p===p; }, p;
+  g.append(gridCell('','lbl')); for (p=n-1;p>=0;p--) g.append(gridCell(PV[Math.min(p,5)].ab,'lbl',p));
+  g.append(gridCell('','carry')); for (p=n-1;p>=0;p--) g.append(gridCell(carryInto[p]?'1':'','carry',null,false,'--pcx:var(--t'+Math.min(p,5)+')'));
+  g.append(gridCell('','')); for (p=n-1;p>=0;p--) g.append(gridCell(p<String(a).length?da[p]:'','dig',null,on(p)));
+  g.append(gridCell('+','opc')); for (p=n-1;p>=0;p--) g.append(gridCell(p<String(b).length?db[p]:'','dig',null,on(p)));
+  g.append(h('div',{class:'vline', style:'grid-column:1 / span '+(n+1)}));
+  g.append(gridCell('','')); for (p=n-1;p>=0;p--) g.append(gridCell(res[p]!=null?res[p]:'','res',null,on(p)));
+  return g;
+}
+function subGrid(a,b,steps,k){
+  var orig=digitsOf(a), db=digitsOf(b), n=orig.length, cur = k>0 ? steps[k-1] : null, snap = cur ? cur.snap : orig, res={};
+  steps.slice(0,k).forEach(function(s){ res[s.p]=s.d; });
+  var complete = k===steps.length, dl=String(a-b).length;
+  var g=h('div',{class:'vgrid', style:'grid-template-columns:repeat('+(n+1)+',var(--cw))', role:'img', 'aria-label':fmt(a)+' minus '+fmt(b)+' written in columns'});
+  var on=function(p){ return cur && cur.p===p; }, p;
+  g.append(gridCell('','lbl')); for (p=n-1;p>=0;p--) g.append(gridCell(PV[Math.min(p,5)].ab,'lbl',p));
+  g.append(gridCell('','carry')); for (p=n-1;p>=0;p--) g.append(gridCell(snap[p]!==orig[p]?snap[p]:'','carry',null,false,'--pcx:var(--t2)'));
+  g.append(gridCell('','')); for (p=n-1;p>=0;p--) g.append(gridCell(orig[p],'dig'+(snap[p]!==orig[p]?' struck':''),null,on(p)));
+  g.append(gridCell(MINUS,'opc')); for (p=n-1;p>=0;p--) g.append(gridCell(p<String(b).length?db[p]:'','dig',null,on(p)));
+  g.append(h('div',{class:'vline', style:'grid-column:1 / span '+(n+1)}));
+  g.append(gridCell('','')); for (p=n-1;p>=0;p--){ var v = res[p]!=null ? res[p] : ''; if (complete && p>=dl && p>0) v=''; g.append(gridCell(v,'res',null,on(p))); }
+  return g;
+}
+function addSide(a,b,steps,k){
+  var box=h('div',{class:'sidecard'});
+  if (k===0){ box.append(h('p',{class:'say'},'Line up the places so ones sit under ones. Always start adding from the ones on the right.')); return box; }
+  var s=steps[k-1];
+  if (s.fin){ box.append(h('p',{class:'say done', html:'Bring the carried 1 down into the '+PV[s.p].n+' place. All done! '+fmt(a)+' + '+fmt(b)+' = <b>'+fmt(a+b)+'</b>'})); return box; }
+  var P=PV[Math.min(s.p,5)];
+  var say='<b>'+cap(P.n)+':</b> '+s.x+' + '+s.y+(s.cin?' + 1 carried':'')+' = <b>'+s.s+'</b>. ';
+  say += s.cout ? 'That is 10 or more, so trade 10 '+P.n+' for 1 '+PV[s.p+1].one+'. Write <b>'+s.write+'</b> and carry the 1.' : 'Less than 10, so just write <b>'+s.write+'</b>.';
+  box.append(h('p',{class:'say', html:say}));
+  var vis=h('div',{class:'dotsvis', style:'--pc:var(--c'+Math.min(s.p,5)+')'});
+  if (s.cout){
+    vis.append(h('div',{class:'ring','aria-hidden':'true'}, dotsRow(10)), h('span',{class:'arrow','aria-hidden':'true'},'\u2192'),
+      h('span',{class:'disc big'+(s.p+1===1?' gold':''), style:'--pc:var(--c'+Math.min(s.p+1,5)+')'}, PV[Math.min(s.p+1,5)].lab),
+      h('div',{class:'rest','aria-hidden':'true'}, dotsRow(s.s-10)),
+      h('p',{class:'cap'}, '10 '+P.n+' make 1 '+PV[s.p+1].one+'. '+(s.s-10)+' '+(s.s-10===1?P.one:P.n)+' stay in this place.'));
+  } else {
+    vis.append(h('div',{class:'rest','aria-hidden':'true'}, dotsRow(s.s)), h('p',{class:'cap'}, s.s+' '+(s.s===1?P.one:P.n)+'. No trade needed.'));
+  }
+  box.append(vis);
+  if (k===steps.length) box.append(h('p',{class:'say done', html:'All done! '+fmt(a)+' + '+fmt(b)+' = <b>'+fmt(a+b)+'</b>'}));
+  return box;
+}
+function subSide(a,b,steps,k){
+  var box=h('div',{class:'sidecard'});
+  if (k===0){ box.append(h('p',{class:'say'},'Line up the places. Start subtracting from the ones on the right. If the top digit is too small, borrow from the place next door.')); return box; }
+  var s=steps[k-1], P=PV[s.p], say;
+  if (!s.borrow) say='<b>'+cap(P.n)+':</b> '+s.x+' '+MINUS+' '+s.y+' = <b>'+s.d+'</b>.';
+  else if (s.borrow.from===s.p+1) say='<b>'+cap(P.n)+':</b> '+s.before+' '+MINUS+' '+s.y+'? Not enough '+P.n+'. Break 1 '+PV[s.p+1].one+' into 10 '+P.n+'. Now it is '+s.x+' '+MINUS+' '+s.y+' = <b>'+s.d+'</b>.';
+  else say='<b>'+cap(P.n)+':</b> '+s.before+' '+MINUS+' '+s.y+'? Not enough '+P.n+', and the '+PV[s.p+1].n+' place is 0. Go left to the '+PV[s.borrow.from].n+', break 1 open and pass it down. Every 0 on the way becomes 9, and the '+P.n+' get 10 more. Now it is '+s.x+' '+MINUS+' '+s.y+' = <b>'+s.d+'</b>.';
+  box.append(h('p',{class:'say', html:say}));
+  var vis=h('div',{class:'dotsvis', style:'--pc:var(--c'+Math.min(s.p,5)+')'});
+  if (s.borrow){
+    vis.append(h('span',{class:'disc big'+(s.p+1===1?' gold':''), style:'--pc:var(--c'+Math.min(s.p+1,5)+')'}, PV[s.p+1].lab),
+      h('span',{class:'arrow','aria-hidden':'true'},'\u2192'), h('div',{class:'ring','aria-hidden':'true'}, dotsRow(10)));
+  }
+  vis.append(h('div',{class:'rest','aria-hidden':'true'}, times(s.x, function(i){ return h('span',{class:'dot'+(i>=s.x-s.y?' gone':'')}); })),
+    h('p',{class:'cap'}, s.x+' '+(s.x===1?P.one:P.n)+', take away '+s.y+' (the dashed ones). '+s.d+' left.'));
+  box.append(vis);
+  if (k===steps.length) box.append(h('p',{class:'say done', html:'All done! '+fmt(a)+' '+MINUS+' '+fmt(b)+' = <b>'+fmt(a-b)+'</b>. Check it: '+fmt(a-b)+' + '+fmt(b)+' = '+fmt(a)+'.'}));
+  return box;
+}
+function columnLab(root, o){
+  var a, b, steps, k=0;
+  var chips=h('div',{class:'chips'});
+  var ia=h('input',{type:'text',inputmode:'numeric',class:'ans sm','aria-label':'First number'});
+  var ib=h('input',{type:'text',inputmode:'numeric',class:'ans sm','aria-label':'Second number'});
+  var gridBox=h('div',{class:'scroll-x'}), side=h('div'), prog=h('div',{class:'progress'});
+  var back=h('button',{class:'btn', onclick:function(){ if (k>0){ k--; draw(); } }},'Back');
+  var next=h('button',{class:'btn go', onclick:function(){ if (k<steps.length){ k++; draw(); } }},'Next step');
+  var again=h('button',{class:'btn ghost', onclick:function(){ k=0; draw(); }},'Start over');
+  root.append(h('section',{class:'panel'},
+    h('h2',{},o.title), h('p',{class:'hint'},o.hint), chips,
+    h('div',{class:'own'}, h('span',{},'Or try your own:'), ia, h('span',{class:'op'}, o.kind==='add'?'+':MINUS), ib,
+      h('button',{class:'btn', onclick:useOwn},'Use my numbers')),
+    h('div',{class:'split'}, h('div',{class:'vcard'}, gridBox), h('div',{}, prog, side, h('div',{class:'step-actions', style:'margin-top:12px'}, back, next, again)))));
+  function useOwn(){
+    var x=Number(parseNum(ia.value)), y=Number(parseNum(ib.value));
+    var err = o.validate(x,y); if (err){ toast(err); return; }
+    load(x,y);
+  }
+  function load(x,y){ a=x; b=y; steps = o.kind==='add' ? addSteps(a,b) : subSteps(a,b); k=0; drawChips(); draw(); }
+  function drawChips(){ chips.innerHTML=''; o.examples.forEach(function(e){ chips.append(h('button',{class:'chip'+(e[0]===a&&e[1]===b?' on':''), onclick:function(){ load(e[0],e[1]); }}, e[2])); }); }
+  function draw(){
+    gridBox.innerHTML=''; gridBox.append(o.kind==='add' ? addGrid(a,b,steps,k) : subGrid(a,b,steps,k));
+    side.innerHTML=''; side.append(o.kind==='add' ? addSide(a,b,steps,k) : subSide(a,b,steps,k));
+    prog.textContent = k===0 ? 'Press Next step to begin' : 'Step '+k+' of '+steps.length;
+    back.disabled = k===0; next.disabled = k>=steps.length;
+  }
+  load(o.examples[0][0], o.examples[0][1]);
+}
+function validWhole(x){ return isFinite(x) && x===Math.floor(x) && x>0; }
+function learnAdd(root){
+  columnLab(root,{kind:'add', title:'Watch the carrying, one column at a time',
+    hint:'Pick an example and press Next step. The dots show what really happens when a column adds up to 10 or more.',
+    examples:[[3241,5406,'No regrouping: 3,241 + 5,406'],[4786,2358,'With regrouping: 4,786 + 2,358'],[38695,27548,'5 digits: 38,695 + 27,548'],[245867,318596,'6 digits: 245,867 + 318,596']],
+    validate:function(x,y){ if (!validWhole(x)||!validWhole(y)) return 'Type two whole numbers first.'; if (x+y>999999) return 'Keep the total under 1,000,000.'; return null; }});
+  root.append(h('section',{class:'panel'},
+    h('h2',{},'Estimate first, then check'),
+    h('p',{class:'hint', html:'Before you add, round each number. <b>4,786 + 2,358</b> is about <b>5,000 + 2,000 = 7,000</b>. The real answer, 7,144, is close to 7,000, so it makes sense. If your answer is far from the estimate, look for a missing carry.'})));
+}
+function learnSub(root){
+  columnLab(root,{kind:'sub', title:'Watch the borrowing, one column at a time',
+    hint:'Pick an example and press Next step. Borrowing means breaking 1 of the next place into 10 of this place.',
+    examples:[[8796,3452,'No regrouping: 8,796 '+MINUS+' 3,452'],[7302,4578,'Borrow across a 0: 7,302 '+MINUS+' 4,578'],[52416,18739,'5 digits: 52,416 '+MINUS+' 18,739'],[600000,248375,'Lots of zeros: 600,000 '+MINUS+' 248,375']],
+    validate:function(x,y){ if (!validWhole(x)||!validWhole(y)) return 'Type two whole numbers first.'; if (x>999999) return 'Use numbers up to 999,999.'; if (y>x) return 'The first number must be the bigger one.'; return null; }});
+  root.append(h('section',{class:'panel'},
+    h('h2',{},'Check subtraction with addition'),
+    h('p',{class:'hint', html:'Subtraction and addition undo each other. If <b>7,302 '+MINUS+' 4,578 = 2,724</b>, then <b>2,724 + 4,578</b> must give back <b>7,302</b>. If it does not, something went wrong.'})));
+}
+
+/* ================= LEARN: skip counting ================= */
+function learnSkip(root){
+  var step=5, hops=0, MAXH=10;
+  var chips=h('div',{class:'chips'}), lineBox=h('div',{class:'scroll-x'}), said=h('p',{class:'say', style:'margin-top:12px'});
+  var chart=h('div',{class:'hundred', role:'img', 'aria-label':'Hundred chart'}), chartNote=h('p',{class:'hint'});
+  var hop=h('button',{class:'btn go big', onclick:doHop},'Hop!');
+  var reset=h('button',{class:'btn', onclick:function(){ hops=0; draw(0); }},'Start again');
+  root.append(
+    h('section',{class:'panel'}, h('h2',{},'Hop along the number line'),
+      h('p',{class:'hint'},'Pick a jump size, then press Hop. Every hop adds the same amount.'),
+      chips, lineBox, h('div',{class:'step-actions', style:'margin-top:8px'}, hop, reset), said),
+    h('section',{class:'panel'}, h('h2',{},'See the pattern on a hundred chart'), chartNote, chart));
+  var X=function(i){ return 40+i*62; };
+  function draw(frogAt){
+    chips.innerHTML='';
+    [2,3,4,5,10,25,100].forEach(function(s){ chips.append(h('button',{class:'chip'+(s===step?' on':''), onclick:function(){ step=s; hops=0; draw(0); }}, 'Count by '+s+'s')); });
+    var W=40+MAXH*62+40, svg='<svg viewBox="0 0 '+W+' 176" class="numline" role="img" aria-label="Number line counting by '+step+'s, '+hops+' hops so far">';
+    svg += '<line x1="18" y1="132" x2="'+(W-18)+'" y2="132" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>';
+    for (var i=0;i<=MAXH;i++){
+      var reached = i>0 && i<=hops;
+      svg += '<line x1="'+X(i)+'" y1="121" x2="'+X(i)+'" y2="143" stroke="currentColor" stroke-width="3"/>'+
+        '<text x="'+X(i)+'" y="166" text-anchor="middle" font-size="'+(step>=100?13:15)+'" font-weight="'+(reached?700:400)+'" fill="'+(reached?'var(--t0)':'currentColor')+'">'+fmt(i*step)+'</text>';
+    }
+    for (var j=1;j<=hops;j++){
+      var mx=(X(j-1)+X(j))/2;
+      svg += '<path d="M '+X(j-1)+' 124 Q '+mx+' 58 '+X(j)+' 124" fill="none" stroke="var(--c0)" stroke-width="3" stroke-dasharray="6 5"/>'+
+        '<text x="'+mx+'" y="78" text-anchor="middle" font-size="13" font-weight="700" fill="var(--t0)">+'+step+'</text>';
+    }
+    svg += '<g class="frog" style="transform:translateX('+X(frogAt)+'px)"><g class="frog-in"><text x="0" y="118" text-anchor="middle" font-size="34">\uD83D\uDC38</text></g></g></svg>';
+    lineBox.innerHTML=svg;
+    var nums = times(hops, function(i){ return fmt((i+1)*step); });
+    said.innerHTML = hops===0 ? 'The frog starts at 0. Each hop is '+step+'.' :
+      'You said: <b>'+nums.join(', ')+'</b><br>'+hops+' hop'+(hops>1?'s':'')+' of '+step+' is '+hops+' '+TIMES+' '+step+' = <b>'+fmt(hops*step)+'</b>';
+    hop.disabled = hops>=MAXH;
+    chart.innerHTML='';
+    if (step<=10){
+      chartNote.textContent='The numbers you say when counting by '+step+'s are coloured. The dark ones are where the frog has landed. Can you see the pattern?';
+      for (var v=1;v<=100;v++) chart.append(h('span',{class:(v%step===0 ? (v<=hops*step?'reached':'hit') : '')}, v));
+      chart.classList.remove('hidden');
+    } else {
+      chartNote.textContent = step===25 ? 'Counting by 25s jumps over most of a hundred chart. Look at the number line instead: the numbers always end in 25, 50, 75 or 00, just like quarters in a dollar.' :
+        'Counting by 100s: only the hundreds digit changes each time. Everything else stays the same.';
+      chart.classList.add('hidden');
+    }
+  }
+  function doHop(){
+    if (hops>=MAXH) return;
+    hops++; draw(hops-1);
+    var g=lineBox.querySelector('.frog'), inner=lineBox.querySelector('.frog-in');
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ g.style.transform='translateX('+X(hops)+'px)'; inner.classList.add('jump'); }); });
+  }
+  draw(0);
+}
+
+/* ================= LEARN: multiplication ================= */
+function learnMul(root){
+  var r=3, c=7;
+  var arr=h('div',{class:'array', role:'img'}), txt=h('div',{class:'say'});
+  var rs=h('input',{type:'range',min:1,max:10,value:r,'aria-label':'Number of rows'}), cs=h('input',{type:'range',min:1,max:10,value:c,'aria-label':'Dots in each row'});
+  var rl=h('b'), cl=h('b');
+  rs.addEventListener('input', function(){ r=+rs.value; drawA(); });
+  cs.addEventListener('input', function(){ c=+cs.value; drawA(); });
+  var turn=h('button',{class:'btn', onclick:function(){
+    if (reduceMotion){ swap(); return; }
+    arr.classList.add('spin'); setTimeout(function(){ swap(); arr.classList.remove('spin'); }, 360);
+  }},'Turn it around');
+  function swap(){ var t=r; r=c; c=t; rs.value=r; cs.value=c; drawA(); toast(r+' '+TIMES+' '+c+' and '+c+' '+TIMES+' '+r+' are both '+(r*c)+'.'); }
+  function drawA(){
+    rl.textContent=r; cl.textContent=c;
+    arr.style.gridTemplateColumns='repeat('+c+',22px)';
+    arr.setAttribute('aria-label', r+' rows of '+c+' dots');
+    arr.innerHTML='';
+    for (var i=0;i<r;i++) for (var j=0;j<c;j++) arr.append(h('span',{class:'dot', style:'--pc:var(--c'+(i%2?0:3)+')'}));
+    txt.innerHTML = r+' row'+(r>1?'s':'')+' of '+c+'<br>'+times(r,function(){ return c; }).join(' + ')+' = '+(r*c)+'<div class="eq">'+r+' '+TIMES+' '+c+' = '+(r*c)+'</div>';
+  }
+  root.append(h('section',{class:'panel'},
+    h('h2',{},'Build an array'),
+    h('p',{class:'hint'},'Multiplication is equal groups. An array puts the groups in rows so you can see them all at once.'),
+    h('div',{class:'two-col'},
+      h('div',{}, h('div',{class:'sliders'}, h('span',{},'Rows'), rs, rl, h('span',{},'In each row'), cs, cl), txt, h('div',{style:'margin-top:12px'}, turn)),
+      h('div',{class:'scroll-x'}, arr))));
+  drawA();
+
+  var A=34, B=5, ex=[[34,5],[23,3],[57,3],[78,6],[94,7]];
+  var chips=h('div',{class:'chips'}), groups=h('div',{class:'groups'}), area=h('div'), maths=h('div',{class:'sidecard'});
+  function drawB(){
+    chips.innerHTML='';
+    ex.forEach(function(e){ chips.append(h('button',{class:'chip'+(e[0]===A&&e[1]===B?' on':''), onclick:function(){ A=e[0]; B=e[1]; drawB(); }}, e[0]+' '+TIMES+' '+e[1])); });
+    chips.append(h('button',{class:'chip', onclick:function(){ A=rnd(12,99); B=rnd(2,9); drawB(); }},'Surprise me'));
+    var T=Math.floor(A/10), O=A%10;
+    groups.innerHTML='';
+    for (var i=0;i<B;i++) groups.append(h('div',{class:'grp'}, h('b',{},A), rods(T,true), odots(O)));
+    var W=520, wT=Math.max(140, W*(T*10)/A), wO=Math.max(90, W-wT), H=Math.min(150, 40+B*12);
+    var sc=W/(wT+wO); wT*=sc; wO*=sc;
+    area.innerHTML='<svg viewBox="0 0 580 '+(H+60)+'" role="img" aria-label="Area model" style="max-width:580px;width:100%;color:var(--ink)">'+
+      '<text x="'+(40+wT/2)+'" y="20" text-anchor="middle" font-size="16" font-weight="700" fill="currentColor">'+(T*10)+'</text>'+
+      '<text x="'+(40+wT+wO/2)+'" y="20" text-anchor="middle" font-size="16" font-weight="700" fill="currentColor">'+O+'</text>'+
+      '<text x="22" y="'+(32+H/2)+'" text-anchor="middle" font-size="16" font-weight="700" fill="currentColor">'+B+'</text>'+
+      '<rect x="40" y="30" width="'+wT+'" height="'+H+'" rx="8" fill="var(--c1)" fill-opacity=".38" stroke="currentColor" stroke-width="2.5"/>'+
+      '<rect x="'+(40+wT)+'" y="30" width="'+wO+'" height="'+H+'" rx="8" fill="var(--c0)" fill-opacity=".38" stroke="currentColor" stroke-width="2.5"/>'+
+      '<text x="'+(40+wT/2)+'" y="'+(36+H/2)+'" text-anchor="middle" font-size="17" font-weight="600" fill="currentColor">'+(T*10)+' '+TIMES+' '+B+' = '+(T*10*B)+'</text>'+
+      '<text x="'+(40+wT+wO/2)+'" y="'+(36+H/2)+'" text-anchor="middle" font-size="15" font-weight="600" fill="currentColor">'+O+' '+TIMES+' '+B+' = '+(O*B)+'</text>'+
+      '<text x="'+(40+(wT+wO)/2)+'" y="'+(H+54)+'" text-anchor="middle" font-size="16" fill="currentColor">'+(T*10*B)+' + '+(O*B)+' = '+(A*B)+'</text></svg>';
+    var onesP=O*B, carry=Math.floor(onesP/10), tensP=T*B+carry;
+    maths.innerHTML='<p class="say"><b>Break apart:</b> '+A+' '+TIMES+' '+B+' = ('+(T*10)+' '+TIMES+' '+B+') + ('+O+' '+TIMES+' '+B+') = '+(T*10*B)+' + '+onesP+' = <b>'+(A*B)+'</b></p>'+
+      '<p class="say"><b>The vertical way:</b></p>'+
+      '<p class="say">Ones: '+O+' '+TIMES+' '+B+' = '+onesP+'. '+(carry ? 'Write '+(onesP%10)+' and carry '+carry+' ten'+(carry>1?'s':'')+'.' : 'Write '+onesP+'.')+'</p>'+
+      '<p class="say">Tens: '+T+' '+TIMES+' '+B+' = '+(T*B)+(carry ? ', plus the '+carry+' carried = '+tensP : '')+'. Write '+tensP+'.</p>'+
+      '<div class="stack" style="margin-top:6px"><div class="srow"><span></span><span>'+(carry?'<span style="font-size:.55em;color:var(--t2)">'+carry+'</span>':'')+'</span></div>'+
+      '<div class="srow"><span></span><span>'+A+'</span></div><div class="srow"><span>'+TIMES+'</span><span>'+B+'</span></div>'+
+      '<div class="sline" style="height:auto"></div><div class="srow"><span></span><span style="color:var(--t3)">'+(A*B)+'</span></div></div>';
+  }
+  root.append(h('section',{class:'panel'},
+    h('h2',{},'Break apart a 2-digit number'),
+    h('p',{class:'hint'},'To multiply 34 by 5, make 5 groups of 34. Split each 34 into tens (gold rods) and ones (green dots). Multiply each part, then add.'),
+    chips,
+    h('div',{class:'two-col'}, h('div',{}, groups), h('div',{}, area, maths))));
+  drawB();
+}
+
+/* ================= LEARN: division ================= */
+function divStates(a,d){
+  var T=Math.floor(a/10), O=a%10, S=[];
+  S.push({bt:T,bo:O,pt:0,po:0,msg:a+' is '+T+' ten'+(T===1?'':'s')+' and '+O+' one'+(O===1?'':'s')+'. Let\u2019s share them equally onto '+d+' plates.'});
+  var t1=Math.floor(T/d), tl=T%d;
+  S.push({bt:tl,bo:O,pt:t1,po:0,msg: t1>0 ? 'Share the tens first: '+T+' tens '+DIVS+' '+d+' = '+t1+' ten'+(t1>1?'s':'')+' on each plate'+(tl?', with '+tl+' ten'+(tl>1?'s':'')+' left over.':'.') :
+    'There are only '+T+' tens. That is not enough to give every plate a ten, so keep them for now.'});
+  var ones=O;
+  if (tl>0){ ones=O+10*tl; S.push({bt:0,bo:ones,pt:t1,po:0,trade:true,msg:'Trade the '+tl+' leftover ten'+(tl>1?'s':'')+' for '+(10*tl)+' ones. Now there are '+ones+' ones to share.'}); }
+  var o1=Math.floor(ones/d), r=ones%d;
+  S.push({bt:0,bo:r,pt:t1,po:o1,msg:'Share the ones: '+ones+' '+DIVS+' '+d+' = '+o1+' on each plate'+(r?', with '+r+' left over.':'.')});
+  var q=t1*10+o1;
+  S.push({bt:0,bo:r,pt:t1,po:o1,done:true,msg:'Each plate has <b>'+q+'</b>. So <b>'+a+' '+DIVS+' '+d+' = '+q+(r?' r'+r:'')+'</b>. '+
+    (r ? 'The '+r+' left over is the <b>remainder</b>. It is less than '+d+', so it cannot go round all the plates again. ' : '')+
+    'Check: '+d+' '+TIMES+' '+q+(r?' + '+r:'')+' = '+a+'.'});
+  return S;
+}
+function learnDiv(root){
+  var ex=[[84,4,'84 '+DIVS+' 4'],[72,4,'72 '+DIVS+' 4 (trade a ten)'],[58,7,'58 '+DIVS+' 7 (remainder)'],[94,8,'94 '+DIVS+' 8 (remainder)']];
+  var a=84, d=4, S, k;
+  var chips=h('div',{class:'chips'});
+  var ia=h('input',{type:'text',inputmode:'numeric',class:'ans sm','aria-label':'Number to share'}), id=h('input',{type:'text',inputmode:'numeric',class:'ans sm','aria-label':'Number of plates'});
+  var bank=h('div',{class:'bank'}), plates=h('div',{class:'plates'}), say=h('p',{class:'say'}), prog=h('div',{class:'progress'});
+  var back=h('button',{class:'btn', onclick:function(){ if (k>0){ k--; draw(); } }},'Back');
+  var next=h('button',{class:'btn go', onclick:function(){ if (k<S.length-1){ k++; draw(); } }},'Next step');
+  var again=h('button',{class:'btn ghost', onclick:function(){ k=0; draw(); }},'Start over');
+  root.append(h('section',{class:'panel'},
+    h('h2',{},'Share equally onto plates'),
+    h('p',{class:'hint'},'Division means sharing into equal groups. Gold rods are tens, green dots are ones. Share the tens first, then the ones.'),
+    chips,
+    h('div',{class:'own'}, h('span',{},'Or try your own:'), ia, h('span',{class:'op'}, DIVS), id, h('button',{class:'btn', onclick:function(){
+      var x=Number(parseNum(ia.value)), y=Number(parseNum(id.value));
+      if (!validWhole(x)||!validWhole(y)){ toast('Type two whole numbers first.'); return; }
+      if (x<10||x>99){ toast('Use a 2-digit number to share (10 to 99).'); return; }
+      if (y<2||y>9){ toast('Use 2 to 9 plates.'); return; }
+      load(x,y);
+    }},'Use my numbers')),
+    prog, bank, plates, say,
+    h('div',{class:'step-actions', style:'margin-top:12px'}, back, next, again)));
+  function load(x,y){ a=x; d=y; S=divStates(a,d); k=0; drawChips(); draw(); }
+  function drawChips(){ chips.innerHTML=''; ex.forEach(function(e){ chips.append(h('button',{class:'chip'+(e[0]===a&&e[1]===d?' on':''), onclick:function(){ load(e[0],e[1]); }}, e[2])); }); }
+  function draw(){
+    var st=S[k];
+    bank.innerHTML='';
+    [h('span',{class:'bank-label'}, st.done ? (st.bo ? 'Left over (the remainder)' : 'Nothing left over') : 'Still to share')].concat(rods(st.bt), odots(st.bo, !!st.trade)).forEach(function(x){ bank.append(x); });
+    plates.innerHTML='';
+    for (var i=0;i<d;i++) plates.append(h('div',{class:'plate'}, rods(st.pt,true), odots(st.po), h('small',{}, 'Plate '+(i+1))));
+    say.innerHTML=st.msg;
+    prog.textContent = k===0 ? 'Press Next step to start sharing' : 'Step '+k+' of '+(S.length-1);
+    back.disabled = k===0; next.disabled = k>=S.length-1;
+    if (st.done && !st.bo) setTimeout(function(){}, 0);
+  }
+  load(84,4);
+
+  var fa=6, fb=9;
+  var tri=h('div',{class:'tri'}), facts=h('div',{class:'facts'});
+  function drawF(){
+    var c=fa*fb;
+    tri.innerHTML='<svg viewBox="0 0 220 190" role="img" aria-label="Fact triangle for '+fa+', '+fb+' and '+c+'">'+
+      '<path d="M110 14 L206 176 L14 176 Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>'+
+      '<circle cx="110" cy="62" r="28" fill="var(--c4)"/><text x="110" y="71" text-anchor="middle" font-size="26" font-weight="700" fill="#fff">'+c+'</text>'+
+      '<circle cx="58" cy="146" r="23" fill="var(--c3)"/><text x="58" y="154" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">'+fa+'</text>'+
+      '<circle cx="162" cy="146" r="23" fill="var(--c0)"/><text x="162" y="154" text-anchor="middle" font-size="22" font-weight="700" fill="#fff">'+fb+'</text>'+
+      '<text x="110" y="152" text-anchor="middle" font-size="18" fill="currentColor">'+TIMES+'  '+DIVS+'</text></svg>';
+    facts.innerHTML='<span>'+fa+' '+TIMES+' '+fb+' = '+c+'</span><span>'+fb+' '+TIMES+' '+fa+' = '+c+'</span><span>'+c+' '+DIVS+' '+fa+' = '+fb+'</span><span>'+c+' '+DIVS+' '+fb+' = '+fa+'</span>';
+  }
+  root.append(h('section',{class:'panel'},
+    h('h2',{},'Fact families'),
+    h('p',{class:'hint'},'Three numbers make four facts. If you know a times fact, you already know two division facts. Cover the top number and multiply. Cover a bottom number and divide.'),
+    h('div',{class:'two-col'}, tri, h('div',{}, facts, h('div',{style:'margin-top:16px'}, h('button',{class:'btn', onclick:function(){ fa=rnd(2,9); do { fb=rnd(2,9); } while (fb===fa); drawF(); }},'New fact family'))))));
+  drawF();
+}
+
+/* ================= LEARN: story problems ================= */
+var OPS = {'+':{name:'Add',sym:'+'}, '-':{name:'Subtract',sym:MINUS}, 'x':{name:'Multiply',sym:TIMES}, '/':{name:'Divide',sym:DIVS}};
+var STORIES = [
+  {t:'A library had <b>24,350</b> books. It bought <b>3,425</b> more books. How many books does it have now?', op:'+',
+   clue:'The words <i>more</i> and <i>now</i> tell you two amounts join together. Joining means add.',
+   model:{kind:'join',a:24350,b:3425,la:'had',lb:'bought'}, eq:'24,350 + 3,425', ans:27775, unit:'books'},
+  {t:'A stadium holds <b>45,000</b> people. <b>28,769</b> tickets are already sold. How many more tickets can be sold?', op:'-',
+   clue:'You know the whole (45,000) and one part (28,769). To find the missing part, take away.',
+   model:{kind:'part',whole:45000,a:28769,la:'sold'}, eq:'45,000 '+MINUS+' 28,769', ans:16231, unit:'tickets'},
+  {t:'A hall has <b>7</b> rows with <b>13</b> chairs in each row. How many chairs are there?', op:'x',
+   clue:'<i>In each row</i> means equal groups. Putting equal groups together means multiply.',
+   model:{kind:'groups',n:7,size:13}, eq:'7 '+TIMES+' 13', ans:91, unit:'chairs'},
+  {t:'<b>96</b> students split into teams of <b>8</b>. How many teams are there?', op:'/',
+   clue:'You know the total and the size of each team. Splitting a total into equal groups means divide.',
+   model:{kind:'share',total:96,size:8}, eq:'96 '+DIVS+' 8', ans:12, unit:'teams'},
+  {t:'<b>50</b> children are going to a party. Each car can take <b>4</b> children. How many cars are needed so every child gets a ride?', op:'/',
+   clue:'Groups of 4 made from 50 means divide. Then think carefully about the children left over.',
+   model:{kind:'share',total:50,size:4}, eq:'50 '+DIVS+' 4', ans:13, unit:'cars',
+   note:'50 '+DIVS+' 4 = 12 r2. Twelve cars carry 48 children, but 2 children are still waiting. They need one more car, so the answer is <b>13</b>.'}
+];
+function barModel(m){
+  var wrap=h('div',{class:'bar', role:'img', 'aria-label':'Bar model'});
+  function seg(label, flex, bg, cls){ return h('div',{class:'seg'+(cls?' '+cls:''), style:'flex:'+flex+';background:'+(bg||'var(--card)')}, label); }
+  if (m.kind==='join'){
+    var tot=m.a+m.b, fa=Math.max(.3,m.a/tot), fb=Math.max(.3,m.b/tot);
+    wrap.append(h('div',{class:'bar-row'}, seg(fmt(m.a)+' '+m.la, fa, 'color-mix(in srgb,var(--c3) 30%,var(--card))'), seg(fmt(m.b)+' '+m.lb, fb, 'color-mix(in srgb,var(--c0) 30%,var(--card))')),
+      h('div',{class:'brace'},'? altogether'));
+  } else if (m.kind==='part'){
+    var fs=Math.max(.3,m.a/m.whole);
+    wrap.append(h('div',{class:'bar-row'}, seg(fmt(m.whole)+' in all', 1, 'color-mix(in srgb,var(--c4) 28%,var(--card))')),
+      h('div',{class:'bar-row'}, seg(fmt(m.a)+' '+m.la, fs, 'color-mix(in srgb,var(--c2) 28%,var(--card))'), seg('?', Math.max(.3,1-fs), null, 'q')));
+  } else if (m.kind==='groups'){
+    wrap.append(h('div',{class:'bar-row'}, times(m.n, function(){ return seg(String(m.size), 1, 'color-mix(in srgb,var(--c4) 28%,var(--card))'); })),
+      h('div',{class:'brace'}, m.n+' equal groups: ? altogether'));
+  } else {
+    var full=Math.floor(m.total/m.size), rem=m.total%m.size;
+    var boxes=times(full, function(){ return seg(String(m.size), m.size, 'color-mix(in srgb,var(--c1) 34%,var(--card))'); });
+    if (rem) boxes.push(seg(String(rem), m.size, null, 'partial'));
+    wrap.append(h('div',{class:'bar-row'}, seg(m.total+' in all', 1, 'color-mix(in srgb,var(--c4) 28%,var(--card))')),
+      h('div',{class:'bar-row'}, boxes), h('div',{class:'brace'}, 'How many groups of '+m.size+'?'));
+  }
+  return wrap;
+}
+function learnWord(root){
+  var idx=0;
+  var panel=h('section',{class:'panel'});
+  root.append(h('section',{class:'panel'},
+    h('h2',{},'Be a story detective'),
+    h('p',{class:'hint', html:'Every story problem asks you three things. <b>What is happening?</b> Joining, taking away, equal groups or sharing. <b>Which operation matches?</b> <b>What is the answer?</b> Check it makes sense.'})), panel);
+  function show(){
+    var s=STORIES[idx], stage=0;
+    panel.innerHTML='';
+    var fb=h('div',{class:'feedback', role:'status','aria-live':'polite'}), after=h('div');
+    var opsBox=h('div',{class:'ops'});
+    Object.keys(OPS).forEach(function(key){
+      var b=h('button',{class:'btn op-btn', onclick:function(){
+        if (stage>0) return;
+        if (key===s.op){
+          b.classList.add('right'); stage=1;
+          Array.prototype.forEach.call(opsBox.children, function(x){ x.disabled=true; });
+          fb.className='feedback good'; fb.innerHTML='<b>Yes, '+OPS[key].name.toLowerCase()+'.</b> '+s.clue;
+          solvePart();
+        } else {
+          b.classList.add('wrong'); b.disabled=true;
+          fb.className='feedback bad'; fb.innerHTML='<b>Not this one.</b> Hint: '+s.clue.split('.')[0]+'.';
+        }
+      }}, h('span',{}, OPS[key].sym), OPS[key].name);
+      opsBox.append(b);
+    });
+    panel.append(h('p',{class:'progress'},'Story '+(idx+1)+' of '+STORIES.length), h('p',{class:'story', html:s.t}),
+      h('p',{style:'margin-top:14px;font-weight:600'},'Which operation solves it?'), opsBox, fb, after);
+    function solvePart(){
+      var inp=h('input',{type:'text',inputmode:'numeric',class:'ans','aria-label':'Your answer'});
+      var res=h('div',{class:'feedback', role:'status','aria-live':'polite'});
+      var chk=h('button',{class:'btn go', onclick:check},'Check');
+      inp.addEventListener('keydown', function(e){ if (e.key==='Enter') check(); });
+      after.append(barModel(s.model), h('p',{class:'eq', style:'margin:8px 0 12px'}, s.eq+' = ?'),
+        h('div',{class:'answer-row'}, inp, h('span',{class:'unit'}, s.unit), chk), res);
+      setTimeout(function(){ inp.focus(); }, 30);
+      function check(){
+        var v=parseNum(inp.value); if (v===''){ toast('Type your answer first.'); return; }
+        var ok = Number(v)===s.ans;
+        inp.classList.remove('right','wrong'); inp.classList.add(ok?'right':'wrong');
+        if (ok){
+          inp.disabled=true; chk.disabled=true;
+          res.className='feedback good'; res.innerHTML='<b>Correct: '+fmt(s.ans)+' '+s.unit+'.</b> '+(s.note||'');
+          res.append(h('div',{class:'fb-actions'}, idx<STORIES.length-1 ?
+            h('button',{class:'btn go', onclick:function(){ idx++; show(); }},'Next story') :
+            h('button',{class:'btn go', onclick:function(){ idx=0; show(); }},'Start the stories again')));
+        } else {
+          res.className='feedback bad';
+          res.innerHTML = s.note && Number(v)===Math.floor(s.model.total/s.model.size) ? '<b>So close.</b> That many cars leaves some children behind. What about the ones left over?' :
+            '<b>Not yet.</b> Work out '+s.eq+' carefully in your notebook, then try again.';
+        }
+      }
+    }
+  }
+  show();
+}
+
+
+/* ================= LEARN: multi-step stories ================= */
+var MS = [
+  {t:'A box holds <b>24</b> crayons. Ana buys <b>3</b> boxes. She already had <b>15</b> crayons. How many crayons does she have now?',
+   final:'Ana has <b>87 crayons</b> now.', check:'87 is more than 72, which makes sense because she added her own crayons.',
+   steps:[
+    {find:'How many crayons are in the 3 boxes', not:[{t:'How many crayons Ana has now', why:'That is the question at the end. First we need the crayons in the boxes.'},{t:'How many crayons are in one box', why:'The story already tells us: 24.'}],
+     op:'x', why:'3 boxes with 24 in each are equal groups, so multiply.', show:'24 '+TIMES+' 3 =', res:72, label:'crayons in boxes'},
+    {find:'How many crayons Ana has now', not:[{t:'How many boxes Ana bought', why:'The story already tells us: 3.'}],
+     op:'+', why:'She already had 15, so join them together.', show:'72 + 15 =', res:87, label:'crayons now'}]},
+  {t:'Movie tickets cost <b>$12</b> each. Leo buys <b>4</b> tickets. He pays with a <b>$60</b> note. How much change does he get?',
+   final:'Leo gets <b>$12</b> change.', check:'$48 + $12 = $60. It matches what he paid.',
+   steps:[
+    {find:'How much the 4 tickets cost', not:[{t:'How much change Leo gets', why:'We cannot find the change until we know the cost.'},{t:'How much one ticket costs', why:'The story already tells us: $12.'}],
+     op:'x', why:'4 tickets at $12 each are equal groups, so multiply.', show:'$12 '+TIMES+' 4 = $', res:48, label:'cost ($)'},
+    {find:'How much change Leo gets', not:[{t:'How much 5 tickets cost', why:'Leo buys 4 tickets, not 5.'}],
+     op:'-', why:'Change is what is left of the $60 after paying, so subtract.', show:'$60 '+MINUS+' $48 = $', res:12, label:'change ($)'}]},
+  {t:'<b>84</b> stickers are shared equally among <b>4</b> friends. Then each friend gives away <b>6</b> stickers. How many stickers does each friend have now?',
+   final:'Each friend has <b>15 stickers</b> now.', check:'15 + 6 = 21, and 21 '+TIMES+' 4 = 84. It all fits.',
+   steps:[
+    {find:'How many stickers each friend gets', not:[{t:'How many stickers each friend has now', why:'That is the question at the end. First find how many each friend gets.'},{t:'How many stickers there are in all', why:'The story already tells us: 84.'}],
+     op:'/', why:'Sharing equally means divide.', show:'84 '+DIVS+' 4 =', res:21, label:'each friend gets'},
+    {find:'How many stickers each friend has now', not:[{t:'How many stickers all 4 friends give away', why:'We want one friend’s stickers, so we do not need that.'}],
+     op:'-', why:'Giving away means taking away, so subtract.', show:'21 '+MINUS+' 6 =', res:15, label:'each has now'}]},
+  {t:'<b>3</b> classes with <b>25</b> students each are going on a trip. <b>6</b> teachers are going too. Each van holds <b>9</b> people. How many vans are needed?',
+   final:'<b>9 vans</b> are needed.', check:'9 vans '+TIMES+' 9 people = 81 people. Everyone fits.',
+   steps:[
+    {find:'How many students are going', not:[{t:'How many vans are needed', why:'We need to know how many people are going first.'}],
+     op:'x', why:'3 classes of 25 are equal groups, so multiply.', show:'25 '+TIMES+' 3 =', res:75, label:'students'},
+    {find:'How many people are going altogether', not:[{t:'How many teachers are going', why:'The story already tells us: 6.'}],
+     op:'+', why:'Students and teachers join together, so add.', show:'75 + 6 =', res:81, label:'people'},
+    {find:'How many vans are needed', not:[{t:'How many students are in each class', why:'The story already tells us: 25.'}],
+     op:'/', why:'Putting 81 people into groups of 9 means divide.', show:'81 '+DIVS+' 9 =', res:9, label:'vans'}]},
+  {t:'<b>58</b> children are going to a party. Each car carries <b>4</b> children. Each car trip costs <b>$9</b>. How much do all the car trips cost?',
+   final:'All the car trips cost <b>$135</b>.', check:'15 cars carry up to 60 children, enough for all 58. 15 trips at $9 each is $135.',
+   steps:[
+    {find:'How many cars are needed', not:[{t:'How much the car trips cost', why:'We need to know how many cars first.'},{t:'How many children fit in one car', why:'The story already tells us: 4.'}],
+     op:'/', why:'Putting 58 children into groups of 4 means divide.', show:'58 '+DIVS+' 4 = 14 r2, so cars needed =', res:15, label:'cars',
+     near:{14:'14 cars carry 56 children. The 2 children left over still need a car!'}},
+    {find:'How much all the trips cost', not:[{t:'How many children are left over', why:'We already used that to decide on 15 cars.'}],
+     op:'x', why:'15 trips at $9 each are equal groups, so multiply.', show:'$9 '+TIMES+' 15 = $', res:135, label:'cost ($)'}]}
+];
+function learnMulti(root){
+  var idx=0;
+  root.append(h('section',{class:'panel'},
+    h('h2',{},'Big stories, small steps'),
+    h('p',{class:'hint'},'Some stories can’t be solved with one sum. Find one thing first, then use that answer in the next step.'),
+    h('div',{class:'method'}, [['1','Read','What do I know? What must I find?'],['2','Plan','What do I find first?'],['3','Solve','One step at a time.'],['4','Check','Does it make sense?']].map(function(m){
+      return h('div',{class:'mstep'}, h('b',{}, m[0]+'. '+m[1]), h('span',{}, m[2])); }))));
+  var panel=h('section',{class:'panel'}); root.append(panel);
+  function show(){
+    var s=MS[idx], i=0, solved=[];
+    panel.innerHTML='';
+    var trail=h('div',{class:'trail', role:'img', 'aria-label':'Answer trail'}), plan=h('ol',{class:'plan'}), work=h('div',{class:'mwork'}), fb=h('div',{class:'feedback', role:'status','aria-live':'polite'});
+    panel.append(h('p',{class:'progress'},'Story '+(idx+1)+' of '+MS.length+' • '+s.steps.length+' steps'), h('p',{class:'story', html:s.t}),
+      h('p',{class:'cap', style:'margin:14px 0 6px'},'Answer trail'), trail, plan, work, fb);
+    function drawTrail(){
+      trail.innerHTML='';
+      s.steps.forEach(function(st,k){
+        if (k) trail.append(h('span',{class:'tarrow','aria-hidden':'true'},'→'));
+        var done=k<solved.length, last=k===s.steps.length-1;
+        trail.append(h('div',{class:'tnode'+(done?' done':'')+(k===i&&!done?' now':'')+(last?' last':'')},
+          h('b',{}, done ? fmt(st.res) : '?'), h('span',{}, done ? st.label : (last ? 'answer' : 'step '+(k+1)))));
+      });
+    }
+    function stage(){
+      drawTrail(); work.innerHTML='';
+      if (i>=s.steps.length){
+        fb.className='feedback good';
+        fb.innerHTML='<b>Solved!</b> '+s.final+'<br>Check: '+s.check;
+        fb.append(h('div',{class:'fb-actions'}, idx<MS.length-1 ? h('button',{class:'btn go', onclick:function(){ idx++; show(); }},'Next story') :
+          h('button',{class:'btn go', onclick:function(){ idx=0; show(); }},'Start the stories again')));
+        return;
+      }
+      var st=s.steps[i];
+      var opts=shuffle([{t:st.find, ok:true}].concat(st.not));
+      var row=h('div',{class:'choices'});
+      opts.forEach(function(o){
+        var b=h('button',{class:'btn choice', onclick:function(){
+          if (o.ok){ b.classList.add('right'); Array.prototype.forEach.call(row.children,function(x){ x.disabled=true; }); fb.className='feedback'; fb.innerHTML=''; pickOp(st); }
+          else { b.classList.add('wrong'); b.disabled=true; fb.className='feedback bad'; fb.innerHTML='<b>Not yet.</b> '+o.why; }
+        }}, o.t);
+        row.append(b);
+      });
+      work.append(h('p',{class:'ask'}, 'Step '+(i+1)+': What should we find '+(i? 'next':'first')+'?'), row);
+    }
+    function pickOp(st){
+      var ops=h('div',{class:'ops'});
+      Object.keys(OPS).forEach(function(key){
+        var b=h('button',{class:'btn op-btn', onclick:function(){
+          if (key===st.op){ b.classList.add('right'); Array.prototype.forEach.call(ops.children,function(x){ x.disabled=true; }); fb.className='feedback good'; fb.innerHTML='<b>Yes.</b> '+st.why; solve(st); }
+          else { b.classList.add('wrong'); b.disabled=true; fb.className='feedback bad'; fb.innerHTML='<b>Not this one.</b> Think: is it joining, taking away, equal groups, or sharing?'; }
+        }}, h('span',{}, OPS[key].sym), OPS[key].name);
+        ops.append(b);
+      });
+      work.append(h('p',{class:'ask'}, st.find+'. Which operation?'), ops);
+    }
+    function solve(st){
+      var inp=h('input',{type:'text',inputmode:'numeric',autocomplete:'off',class:'ans sm','aria-label':'Answer for this step'});
+      var chk=h('button',{class:'btn go'},'Check');
+      var go2=function(){
+        var v=parseNum(inp.value); if (v===''){ toast('Type your answer first.'); inp.focus(); return; }
+        if (Number(v)===st.res){
+          inp.classList.add('right'); inp.disabled=true; chk.disabled=true;
+          solved.push(st); plan.append(h('li',{}, h('span',{}, st.find), h('b',{}, st.show+' '+fmt(st.res))));
+          i++; fb.className='feedback'; fb.innerHTML='';
+          setTimeout(stage, reduceMotion?0:350);
+        } else {
+          inp.classList.add('wrong'); fb.className='feedback bad';
+          fb.innerHTML = (st.near && st.near[Number(v)]) ? '<b>So close.</b> '+st.near[Number(v)] : '<b>Not quite.</b> Work out '+esc(st.show.replace(/ =.*$/,''))+' carefully and try again.';
+          setTimeout(function(){ inp.classList.remove('wrong'); }, 900);
+        }
+      };
+      chk.addEventListener('click', go2);
+      inp.addEventListener('keydown', function(e){ if (e.key==='Enter') go2(); });
+      work.append(h('div',{class:'answer-row', style:'margin-top:14px'}, h('span',{class:'eq'}, st.show), inp, chk));
+      setTimeout(function(){ inp.focus(); }, 40);
+    }
+    stage();
+  }
+  show();
+}
+
+/* ================= LEARN: area & perimeter ================= */
+var SVGNS='http://www.w3.org/2000/svg';
+function gridSVG(r, c, opts){
+  opts=opts||{};
+  var cell=opts.cell||Math.min(40, Math.floor(320/Math.max(c,1)), Math.floor(220/Math.max(r,1))), W=c*cell, H=r*cell, pad=10;
+  var out='<svg class="apsvg" viewBox="0 0 '+(W+2*pad)+' '+(H+2*pad)+'" width="'+(W+2*pad)+'" height="'+(H+2*pad)+'" role="img" aria-label="'+(opts.label||(r+' rows of '+c+' squares'))+'">';
+  out+='<rect x="'+pad+'" y="'+pad+'" width="'+W+'" height="'+H+'" style="fill:var(--c0)"/>';
+  var d='';
+  for (var i=1;i<r;i++) d+='M'+pad+' '+(pad+i*cell)+'H'+(pad+W);
+  for (var j=1;j<c;j++) d+='M'+(pad+j*cell)+' '+pad+'V'+(pad+H);
+  if (d) out+='<path d="'+d+'" stroke="currentColor" stroke-width="2"/>';
+  out+='<rect x="'+pad+'" y="'+pad+'" width="'+W+'" height="'+H+'" fill="none" stroke="'+(opts.perim?'var(--c6)':'currentColor')+'" stroke-width="'+(opts.perim?6:3)+'"/></svg>';
+  return out;
+}
+function rectSVG(L, Wd, unit, o){
+  o=o||{};
+  var maxW=300, maxH=170, ratio=Math.max(.35, Math.min(3.2, L/Wd)), w=maxW, hh=w/ratio;
+  if (hh>maxH){ hh=maxH; w=hh*ratio; }
+  var lx=70, ty=34, VW=lx+w+40, VH=ty+hh+20;
+  var top = o.top!=null ? o.top : L+' '+unit, side = o.side!=null ? o.side : Wd+' '+unit;
+  var out='<svg class="apsvg" viewBox="0 0 '+VW+' '+VH+'" width="'+VW+'" height="'+VH+'" role="img" aria-label="Rectangle '+esc(top)+' by '+esc(side)+'">';
+  out+='<rect x="'+lx+'" y="'+ty+'" width="'+w+'" height="'+hh+'" rx="4" style="fill:var(--card)" stroke="'+(o.perim?'var(--c6)':'currentColor')+'" stroke-width="'+(o.perim?6:3.5)+'"/>';
+  if (o.square){ out+='<path d="M'+(lx+w/2)+' '+(ty-6)+'v12M'+(lx+w/2)+' '+(ty+hh-6)+'v12M'+(lx-6)+' '+(ty+hh/2)+'h12M'+(lx+w-6)+' '+(ty+hh/2)+'h12" stroke="currentColor" stroke-width="2"/>'; }
+  out+='<text x="'+(lx+w/2)+'" y="'+(ty-12)+'" text-anchor="middle" font-size="17" font-weight="700" fill="currentColor">'+esc(top)+'</text>';
+  out+='<text x="'+(lx-12)+'" y="'+(ty+hh/2+6)+'" text-anchor="end" font-size="17" font-weight="700" fill="currentColor">'+esc(side)+'</text>';
+  if (o.inside){ o.inside.forEach(function(t,k){ out+='<text x="'+(lx+w/2)+'" y="'+(ty+hh/2+6+(k-(o.inside.length-1)/2)*20)+'" text-anchor="middle" font-size="15" fill="currentColor">'+esc(t)+'</text>'; }); }
+  return out+'</svg>';
+}
+function LSVG(W, H, w2, h2, unit, o){
+  o=o||{};
+  var s=Math.min(300/W, 200/H), ox=60, oy=30, pw=W*s, ph=H*s;
+  var X=function(x){ return ox+x*s; }, Y=function(y){ return oy+(H-y)*s; };
+  var pts=[[0,0],[W,0],[W,h2],[w2,h2],[w2,H],[0,H]].map(function(p){ return X(p[0])+' '+Y(p[1]); }).join(' L');
+  var out='<svg class="apsvg" viewBox="0 0 '+(ox+pw+70)+' '+(oy+ph+40)+'" width="'+(ox+pw+70)+'" height="'+(oy+ph+40)+'" role="img" aria-label="L-shape '+W+' by '+H+'">';
+  if (o.split==='down'){
+    out+='<rect x="'+X(0)+'" y="'+Y(H)+'" width="'+(w2*s)+'" height="'+(H*s)+'" style="fill:var(--c0)"/>';
+    out+='<rect x="'+X(w2)+'" y="'+Y(h2)+'" width="'+((W-w2)*s)+'" height="'+(h2*s)+'" style="fill:var(--c1)"/>';
+  } else if (o.split==='across'){
+    out+='<rect x="'+X(0)+'" y="'+Y(h2)+'" width="'+(W*s)+'" height="'+(h2*s)+'" style="fill:var(--c1)"/>';
+    out+='<rect x="'+X(0)+'" y="'+Y(H)+'" width="'+(w2*s)+'" height="'+((H-h2)*s)+'" style="fill:var(--c0)"/>';
+  }
+  out+='<path d="M'+pts+' Z" '+(o.split?'fill="none"':'style="fill:var(--card)"')+' stroke="'+(o.perim?'var(--c6)':'currentColor')+'" stroke-width="'+(o.perim?6:3.5)+'" stroke-linejoin="round"/>';
+  if (o.split==='down') out+='<path d="M'+X(w2)+' '+Y(h2)+'V'+Y(0)+'" stroke="currentColor" stroke-width="3" stroke-dasharray="8 6"/>';
+  if (o.split==='across') out+='<path d="M'+X(0)+' '+Y(h2)+'H'+X(w2)+'" stroke="currentColor" stroke-width="3" stroke-dasharray="8 6"/>';
+  function t(x,y,txt,anchor,col){ out+='<text x="'+x+'" y="'+y+'" text-anchor="'+(anchor||'middle')+'" font-size="'+(txt==='?'?22:16)+'" font-weight="700" fill="'+(col||'currentColor')+'">'+txt+'</text>'; }
+  t(X(W/2), Y(0)+26, W+' '+unit);
+  t(X(W)+10, Y(h2/2)+6, h2+' '+unit, 'start');
+  t(X(w2/2), Y(H)-10, w2+' '+unit);
+  t(X(0)-10, Y(H/2)+6, H+' '+unit, 'end');
+  if (o.missing){
+    var mc = o.reveal ? 'var(--t6)' : 'var(--t2)';
+    t(X((w2+W)/2), Y(h2)-10, o.reveal ? (W-w2)+' '+unit : '?', 'middle', mc);
+    t(X(w2)+10, Y((h2+H)/2)+6, o.reveal ? (H-h2)+' '+unit : '?', 'start', mc);
+  }
+  return out+'</svg>';
+}
+function learnArea(root){
+  /* --- 1. rectangle builder --- */
+  var r=3, c=5, anim=null;
+  var stage=h('div',{class:'apstage'}), readA=h('p',{class:'say'}), readP=h('p',{class:'say'});
+  var rs=h('input',{type:'range',min:1,max:10,value:r,'aria-label':'Rows'}), cs=h('input',{type:'range',min:1,max:10,value:c,'aria-label':'Columns'});
+  var rl=h('b'), cl=h('b');
+  rs.addEventListener('input', function(){ r=+rs.value; draw(); });
+  cs.addEventListener('input', function(){ c=+cs.value; draw(); });
+  function stop(){ if (anim){ clearInterval(anim); anim=null; } }
+  function draw(mode){
+    stop(); rl.textContent=r; cl.textContent=c;
+    var cell=Math.min(44, Math.floor(440/c), Math.floor(300/r)), W=c*cell, H=r*cell, pad=14;
+    var svg=document.createElementNS(SVGNS,'svg');
+    svg.setAttribute('viewBox','0 0 '+(W+2*pad)+' '+(H+2*pad)); svg.setAttribute('width',W+2*pad); svg.setAttribute('height',H+2*pad);
+    svg.setAttribute('class','apsvg'); svg.setAttribute('role','img'); svg.setAttribute('aria-label', r+' rows of '+c+' squares');
+    var cells=[];
+    for (var i=0;i<r;i++) for (var j=0;j<c;j++){
+      var rc=document.createElementNS(SVGNS,'rect');
+      rc.setAttribute('x',pad+j*cell); rc.setAttribute('y',pad+i*cell); rc.setAttribute('width',cell); rc.setAttribute('height',cell);
+      rc.setAttribute('style', mode==='count' ? 'fill:var(--card)' : 'fill:var(--c0)'); rc.setAttribute('stroke','currentColor'); rc.setAttribute('stroke-width','2');
+      var tx=document.createElementNS(SVGNS,'text');
+      tx.setAttribute('x',pad+j*cell+cell/2); tx.setAttribute('y',pad+i*cell+cell/2+5); tx.setAttribute('text-anchor','middle');
+      tx.setAttribute('font-size', Math.max(10, Math.min(15, Math.round(cell/2.6)))); tx.setAttribute('font-weight','700'); tx.setAttribute('fill','currentColor');
+      svg.appendChild(rc); svg.appendChild(tx); cells.push({rc:rc,tx:tx});
+    }
+    var segs=[];
+    function seg(x1,y1,x2,y2){ var l=document.createElementNS(SVGNS,'line'); l.setAttribute('x1',x1); l.setAttribute('y1',y1); l.setAttribute('x2',x2); l.setAttribute('y2',y2);
+      l.setAttribute('stroke', mode==='walk' ? 'var(--line)' : 'currentColor'); l.setAttribute('stroke-width', mode==='walk' ? 7 : 4); l.setAttribute('stroke-linecap','round'); svg.appendChild(l); segs.push(l); }
+    var a, b;
+    for (a=0;a<c;a++) seg(pad+a*cell, pad, pad+(a+1)*cell, pad);
+    for (b=0;b<r;b++) seg(pad+W, pad+b*cell, pad+W, pad+(b+1)*cell);
+    for (a=c;a>0;a--) seg(pad+a*cell, pad+H, pad+(a-1)*cell, pad+H);
+    for (b=r;b>0;b--) seg(pad, pad+b*cell, pad, pad+(b-1)*cell);
+    stage.innerHTML=''; stage.append(svg);
+    readA.innerHTML='<b>Area:</b> '+r+' row'+(r>1?'s':'')+' of '+c+' = '+r+' '+TIMES+' '+c+' = <b>'+(r*c)+' square units</b>';
+    readP.innerHTML='<b>Perimeter:</b> '+c+' + '+r+' + '+c+' + '+r+' = <b>'+(2*(r+c))+' units</b>';
+    if (mode==='count'){
+      var k=0; readA.innerHTML='<b>Counting squares…</b>';
+      var step=function(){ if (k>=cells.length){ stop(); readA.innerHTML='<b>Area:</b> '+(r*c)+' squares. That is '+r+' '+TIMES+' '+c+' = <b>'+(r*c)+' square units</b>'; return; }
+        cells[k].rc.setAttribute('style','fill:var(--c0)'); cells[k].tx.textContent=String(k+1); k++; };
+      if (reduceMotion){ while (k<cells.length) step(); step(); } else anim=setInterval(step, Math.max(40, Math.round(1600/cells.length)));
+    }
+    if (mode==='walk'){
+      var q=0; readP.innerHTML='<b>Walking around…</b>';
+      var step2=function(){ if (q>=segs.length){ stop(); readP.innerHTML='<b>Perimeter:</b> '+segs.length+' units all the way round. That is '+c+' + '+r+' + '+c+' + '+r+' = <b>'+(2*(r+c))+' units</b>'; return; }
+        segs[q].setAttribute('stroke','var(--c6)'); q++; readP.innerHTML='<b>Walking around… '+q+'</b>'; };
+      if (reduceMotion){ while (q<segs.length) step2(); step2(); } else anim=setInterval(step2, Math.max(60, Math.round(2000/segs.length)));
+    }
+  }
+  root.append(h('section',{class:'panel'},
+    h('h2',{},'Build a rectangle'),
+    h('p',{class:'hint'},'Area is the squares that cover the inside. Perimeter is the distance around the edge. Change the size, then watch each one being counted.'),
+    h('div',{class:'two-col'},
+      h('div',{},
+        h('div',{class:'sliders'}, h('span',{},'Rows'), rs, rl, h('span',{},'Columns'), cs, cl),
+        readA, readP,
+        h('div',{class:'step-actions', style:'margin-top:14px'},
+          h('button',{class:'btn ap-a', onclick:function(){ draw('count'); }},'Count the squares'),
+          h('button',{class:'btn ap-p', onclick:function(){ draw('walk'); }},'Walk around the edge'))),
+      h('div',{class:'scroll-x'}, stage))));
+  draw();
+
+  /* --- 2. same area, different perimeters --- */
+  var N=12, chips=h('div',{class:'chips'}), list=h('div',{class:'aplist'}), note=h('p',{class:'say'});
+  function drawN(){
+    chips.innerHTML='';
+    [12,16,18,24,36].forEach(function(n){ chips.append(h('button',{class:'chip'+(n===N?' on':''), onclick:function(){ N=n; drawN(); }}, 'Area '+n)); });
+    var pairs=[]; for (var a=1;a*a<=N;a++) if (N%a===0) pairs.push([a,N/a]);
+    var ps=pairs.map(function(p){ return 2*(p[0]+p[1]); }), mx=Math.max.apply(null,ps), mn=Math.min.apply(null,ps);
+    list.innerHTML='';
+    pairs.forEach(function(p,k){
+      var tag = ps[k]===mx ? 'Longest way round' : ps[k]===mn ? 'Shortest way round' : '';
+      var card=h('div',{class:'apcard'+(tag?' tagged':'')});
+      card.innerHTML=gridSVG(p[0],p[1],{cell:Math.min(24, Math.floor(260/p[1])), perim:true})+
+        '<p><b>'+p[0]+' '+TIMES+' '+p[1]+'</b></p><p>Area '+N+'</p><p><b>Perimeter '+ps[k]+'</b></p>'+(tag?'<p class="aptag">'+tag+'</p>':'');
+      list.append(card);
+    });
+    note.innerHTML='Every rectangle here covers exactly <b>'+N+' squares</b>, but the perimeters go from '+mn+' to '+mx+'. Long and thin means a longer way round.';
+  }
+  root.append(h('section',{class:'panel'},
+    h('h2',{},'Same area, different perimeter'),
+    h('p',{class:'hint'},'Pick an area to see every rectangle that uses exactly that many squares.'),
+    chips, h('div',{class:'scroll-x'}, list), note));
+  drawN();
+
+  /* --- 3. L-shapes --- */
+  var LS=[[10,8,4,3,'m'],[9,7,3,4,'cm'],[8,6,3,2,'ft']], li=0, mode='none', showMiss=false, tried={};
+  var lchips=h('div',{class:'chips'}), lfig=h('div',{class:'apstage'}), lsay=h('div',{class:'sidecard'});
+  function drawL(){
+    var L=LS[li], W=L[0], H=L[1], w2=L[2], h2=L[3], u=L[4];
+    lchips.innerHTML='';
+    LS.forEach(function(x,k){ lchips.append(h('button',{class:'chip'+(k===li?' on':''), onclick:function(){ li=k; mode='none'; showMiss=false; drawL(); }}, 'Shape '+(k+1))); });
+    lfig.innerHTML=LSVG(W,H,w2,h2,u,{split: mode==='none'?null:mode, missing:true, reveal:showMiss, perim:showMiss});
+    var a1, a2, t1, t2;
+    if (mode==='down'){ a1=w2*H; a2=(W-w2)*h2; t1='Tall part: '+w2+' '+TIMES+' '+H+' = '+a1; t2='Bottom part: '+(W-w2)+' '+TIMES+' '+h2+' = '+a2+' (it is '+W+' '+MINUS+' '+w2+' = '+(W-w2)+' wide)'; }
+    if (mode==='across'){ a1=W*h2; a2=w2*(H-h2); t1='Bottom strip: '+W+' '+TIMES+' '+h2+' = '+a1; t2='Top part: '+w2+' '+TIMES+' '+(H-h2)+' = '+a2+' (it is '+H+' '+MINUS+' '+h2+' = '+(H-h2)+' tall)'; }
+    lsay.innerHTML='';
+    if (mode==='none') lsay.append(h('p',{class:'say'},'Where could you cut this L into two rectangles? Try both ways.'));
+    else {
+      tried[li+':'+mode]=1;
+      lsay.append(h('p',{class:'say'}, t1), h('p',{class:'say'}, t2), h('p',{class:'say done', html:'Area = '+a1+' + '+a2+' = <b>'+(a1+a2)+' square '+u+'</b>'}));
+      if (tried[li+':down'] && tried[li+':across']) lsay.append(h('p',{class:'hint'},'Both cuts give the same area. Cut whichever way is easier!'));
+    }
+    if (showMiss) lsay.append(h('p',{class:'say', html:'Hidden sides: '+W+' '+MINUS+' '+w2+' = '+(W-w2)+' and '+H+' '+MINUS+' '+h2+' = '+(H-h2)+'.<br>Perimeter = '+[W,h2,W-w2,H-h2,w2,H].join(' + ')+' = <b>'+(2*(W+H))+' '+u+'</b>'}));
+  }
+  root.append(h('section',{class:'panel'},
+    h('h2',{},'Split an L-shape'),
+    h('p',{class:'hint'},'An L-shape is two rectangles stuck together. Cut it, find each area, then add.'),
+    lchips,
+    h('div',{class:'two-col'}, h('div',{class:'scroll-x'}, lfig),
+      h('div',{}, lsay, h('div',{class:'step-actions', style:'margin-top:14px'},
+        h('button',{class:'btn', onclick:function(){ mode='down'; drawL(); }},'Cut down'),
+        h('button',{class:'btn', onclick:function(){ mode='across'; drawL(); }},'Cut across'),
+        h('button',{class:'btn ap-p', onclick:function(){ showMiss=!showMiss; drawL(); }},'Find the perimeter'))))));
+  drawL();
+}
+
+/* ================= QUIZ GENERATORS ================= */
+var G = {
+  pvValue: function(){
+    var n,s,i,d; do { n=randNum(rnd(5,6)); s=String(n); i=rnd(0,s.length-1); d=s[i]; } while (d==='0' || s.indexOf(d)!==s.lastIndexOf(d));
+    var place=s.length-1-i, val=+d*Math.pow(10,place), opts=[val];
+    shuffle([0,1,2,3,4,5]).forEach(function(q){ var v=+d*Math.pow(10,q); if (opts.length<4 && opts.indexOf(v)<0) opts.push(v); });
+    return {type:'mc', prompt:'What is the value of the digit <b>'+d+'</b> in <b>'+fmt(n)+'</b>?', choices:shuffle(opts.map(fmt)), answer:fmt(val),
+      explain:'The '+d+' is in the '+PV[place].n+' place, so it is worth '+d+' '+TIMES+' '+PV[place].lab+' = '+fmt(val)+'.'};
+  },
+  pvStandard: function(){
+    var n=randNum(rnd(5,6),.3);
+    return {type:'num', prompt:'Write this number in standard form:<br><b>'+expanded(n)+'</b>', answer:n,
+      explain:expanded(n)+' = '+fmt(n)+'.'+(String(n).indexOf('0')>=0 ? ' Put a 0 in any place that has nothing.' : '')};
+  },
+  pvCompare: function(){
+    var a=randNum(rnd(5,6));
+    if (Math.random()<.2) return {type:'mc', prompt:'Which sign goes in the circle?<br><b>'+expanded(a)+'</b> \u25EF <b>'+fmt(a)+'</b>', choices:['&lt;','&gt;','='], answer:'=',
+      explain:expanded(a)+' is just '+fmt(a)+' written in expanded form, so they are equal.'};
+    var b; do { var s=String(a).split(''), i=rnd(1,s.length-1); s[i]=String((+s[i]+rnd(1,9))%10); b=+s.join(''); } while (b===a);
+    return {type:'mc', prompt:'Which sign goes in the circle?<br><b>'+fmt(a)+'</b> \u25EF <b>'+fmt(b)+'</b>', choices:['&lt;','&gt;','='], answer:a<b?'&lt;':'&gt;',
+      explain:compareExplain(a,b)+' So '+fmt(a)+' '+(a<b?'&lt;':'&gt;')+' '+fmt(b)+'.'};
+  },
+  pvRound: function(){
+    var unit=pick([10,100,1000,10000]), n=randNum(unit>=10000?rnd(5,6):rnd(4,5)), r=Math.round(n/unit)*unit, pos=POS[unit], dig=digitsOf(n,7)[pos-1];
+    return {type:'num', prompt:'Round <b>'+fmt(n)+'</b> to the nearest <b>'+fmt(unit)+'</b>.', answer:r,
+      explain:'Look at the '+PV[pos-1].n+' digit: '+dig+'. '+(dig>=5 ? '5 or more, so round up' : '4 or less, so round down')+' to '+fmt(r)+'.'};
+  },
+  pvWords: function(){
+    var n; do { n=randNum(rnd(5,6),.35); } while (String(n).slice(1).indexOf('0')<0);
+    var s=String(n), alts=[];
+    for (var i=0;i<s.length-1;i++) if (s[i]!==s[i+1]){ var t=s.split(''), x=t[i]; t[i]=t[i+1]; t[i+1]=x; if (t[0]!=='0'){ var v=+t.join(''); if (v!==n && alts.indexOf(v)<0) alts.push(v); } }
+    alts=shuffle(alts).slice(0,3);
+    while (alts.length<3){ var y=n+pick([1,10,100,1000,10000])*pick([1,-1]); if (y>0 && y!==n && alts.indexOf(y)<0) alts.push(y); }
+    return {type:'mc', prompt:'Which number is <i>'+words(n)+'</i>?', choices:shuffle([n].concat(alts).map(fmt)), answer:fmt(n),
+      explain:cap(words(n))+' is '+fmt(n)+'. Say the thousands part first, then the rest. Zeros hold empty places.'};
+  },
+  pvMoreLess: function(){
+    var amt=pick([10,100,1000,10000]), more=Math.random()<.5, n=randNum(rnd(5,6));
+    if (!more && n<amt*2) n+=amt*3; if (more && n+amt>999999) n-=amt*3;
+    var ans = more ? n+amt : n-amt;
+    return {type:'num', prompt:'What number is <b>'+fmt(amt)+' '+(more?'more':'less')+'</b> than <b>'+fmt(n)+'</b>?', answer:ans,
+      explain:(more?'Add':'Take away')+' 1 in the '+PV[POS[amt]].n+' place: '+fmt(n)+' '+(more?'+':MINUS)+' '+fmt(amt)+' = '+fmt(ans)+'.'};
+  },
+  addCompute: function(){
+    var L=rnd(4,6), a, b; do { a=randNum(L); b=randNum(rnd(L-1,L)); } while (a+b>999999 || carries(a,b)===0);
+    var c=carries(a,b);
+    return {type:'num', prompt:'Add:', visual:stackHTML(a,b,'+'), answer:a+b,
+      explain:'Start with the ones and move left. You carry '+c+' time'+(c===1?'':'s')+'. '+fmt(a)+' + '+fmt(b)+' = '+fmt(a+b)+'.'};
+  },
+  addNoCarry: function(){
+    var L=rnd(4,5), sa='', sb='';
+    for (var i=0;i<L;i++){ var x=rnd(i===0?1:0,8); sa+=x; sb+=rnd(i===0?1:0,9-x); }
+    var a=+sa, b=+sb;
+    return {type:'num', prompt:'Add:', visual:stackHTML(a,b,'+'), answer:a+b, explain:'No column adds up to 10 or more, so there is nothing to carry. '+fmt(a)+' + '+fmt(b)+' = '+fmt(a+b)+'.'};
+  },
+  addEstimate: function(){
+    var a,b,ra,rb,e; do { a=randNum(4); b=randNum(4); ra=Math.round(a/1000)*1000; rb=Math.round(b/1000)*1000; e=ra+rb; } while (e>18000);
+    var opts=[e]; [e+1000,e-1000,e+2000,e-2000].forEach(function(x){ if (opts.length<4 && x>0 && opts.indexOf(x)<0) opts.push(x); });
+    return {type:'mc', prompt:'Round each number to the nearest thousand, then estimate:<br><b>'+fmt(a)+' + '+fmt(b)+'</b>', choices:shuffle(opts).map(fmt), answer:fmt(e),
+      explain:fmt(a)+' rounds to '+fmt(ra)+' and '+fmt(b)+' rounds to '+fmt(rb)+'. '+fmt(ra)+' + '+fmt(rb)+' = '+fmt(e)+'.'};
+  },
+  addMissing: function(){
+    var a=randNum(4), b=randNum(4), c=a+b;
+    return {type:'num', prompt:'What number goes in the box?<br><span class="blank"></span> + <b>'+fmt(b)+'</b> = <b>'+fmt(c)+'</b>', answer:a,
+      explain:'Subtraction undoes addition: '+fmt(c)+' '+MINUS+' '+fmt(b)+' = '+fmt(a)+'.'};
+  },
+  addError: function(){
+    var a,b,wrong;
+    do { a=randNum(4); b=randNum(4); var da=digitsOf(a,4), db=digitsOf(b,4); wrong=0; for (var p=3;p>=0;p--) wrong=wrong*10+(da[p]+db[p])%10; } while (a+b>9999 || wrong===a+b);
+    return {type:'num', prompt:'Sam worked out <b>'+fmt(a)+' + '+fmt(b)+'</b> and got <b>'+fmt(wrong)+'</b>. He forgot to carry. What is the correct answer?', answer:a+b,
+      explain:'When a column makes 10 or more, the extra ten moves to the next place. '+fmt(a)+' + '+fmt(b)+' = '+fmt(a+b)+'.'};
+  },
+  addFirstCarry: function(){
+    var a,b,p=-1; do { a=randNum(4); b=randNum(4); var da=digitsOf(a,4), db=digitsOf(b,4); p=-1; for (var i=0;i<4;i++) if (da[i]+db[i]>=10){ p=i; break; } } while (a+b>9999);
+    var names=['Ones','Tens','Hundreds','No column needs a carry'], ans = p<0 ? names[3] : names[p];
+    if (p===3) return G.addFirstCarry();
+    return {type:'mc', prompt:'In <b>'+fmt(a)+' + '+fmt(b)+'</b>, which column is the first to need a carry?', visual:stackHTML(a,b,'+'), choices:names, answer:ans,
+      explain: p<0 ? 'Every column adds up to less than 10, so no carrying is needed.' : 'Going from the right, the '+PV[p].n+' column is the first to make 10 or more ('+digitsOf(a,4)[p]+' + '+digitsOf(b,4)[p]+' = '+(digitsOf(a,4)[p]+digitsOf(b,4)[p])+').'};
+  },
+  subCompute: function(){
+    var L=rnd(4,6), a, b; do { a=randNum(L,.25); b=randNum(rnd(L-1,L)); } while (b>=a || borrows(a,b)===0);
+    return {type:'num', prompt:'Subtract:', visual:stackHTML(a,b,MINUS), answer:a-b,
+      explain:'Start at the ones. Borrow whenever the top digit is too small. Check: '+fmt(a-b)+' + '+fmt(b)+' = '+fmt(a)+'.'};
+  },
+  subZeros: function(){
+    var a=rnd(2,9)*pick([1000,10000,100000]), b=rnd(Math.floor(a*.2), a-1);
+    return {type:'num', prompt:'Subtract:', visual:stackHTML(a,b,MINUS), answer:a-b,
+      explain:'Borrow from the first non-zero place. Every 0 you pass becomes 9, and the ones become 10. '+fmt(a)+' '+MINUS+' '+fmt(b)+' = '+fmt(a-b)+'.'};
+  },
+  subCheck: function(){
+    var a, b; do { a=randNum(4); b=randNum(4); } while (b>=a || a-b===b);
+    var c=a-b, right=fmt(c)+' + '+fmt(b)+' = '+fmt(a);
+    var ch=shuffle([right, fmt(a)+' + '+fmt(b)+' = '+fmt(a+b), fmt(a)+' + '+fmt(c)+' = '+fmt(a+c)]);
+    return {type:'mc', prompt:'Which addition checks that <b>'+fmt(a)+' '+MINUS+' '+fmt(b)+' = '+fmt(c)+'</b>?', choices:ch, answer:right,
+      explain:'Add your answer to the number you took away. You should get back the number you started with.'};
+  },
+  subMissing: function(){
+    var a=randNum(rnd(4,5)), c=rnd(Math.floor(a*.1), a-1), b=a-c;
+    return {type:'num', prompt:'What number goes in the box?<br><b>'+fmt(a)+'</b> '+MINUS+' <span class="blank"></span> = <b>'+fmt(c)+'</b>', answer:b,
+      explain:fmt(a)+' '+MINUS+' '+fmt(c)+' = '+fmt(b)+'. Check: '+fmt(a)+' '+MINUS+' '+fmt(b)+' = '+fmt(c)+'.'};
+  },
+  subRight: function(){
+    var a,b; do { a=randNum(4,.2); b=randNum(4); } while (b>=a || borrows(a,b)===0);
+    var right=a-b, da=digitsOf(a,4), db=digitsOf(b,4), wrong=0;
+    for (var p=3;p>=0;p--) wrong=wrong*10+Math.abs(da[p]-db[p]);
+    var showRight = Math.random()<.45 || wrong===right, shown = showRight ? right : wrong, yes = shown===right;
+    return {type:'mc', prompt:'Maya says <b>'+fmt(a)+' '+MINUS+' '+fmt(b)+' = '+fmt(shown)+'</b>. Is she correct?', choices:['Yes','No'], answer:yes?'Yes':'No',
+      explain:'Check with addition: '+fmt(shown)+' + '+fmt(b)+' = '+fmt(shown+b)+(yes ? ', which matches '+fmt(a)+'. She is correct.' :
+        ', not '+fmt(a)+'. She took the smaller digit from the bigger one instead of borrowing. The right answer is '+fmt(right)+'.')};
+  },
+  skipNext: function(){
+    var s=pick([2,3,4,5,10,25,100]), start = s===100 ? rnd(10,95)*10 : s*rnd(1,10);
+    var seq=times(4, function(i){ return start+i*s; });
+    return {type:'num', prompt:'Count by '+s+'s. What comes next?<br><b>'+seq.map(fmt).join(', ')+', <span class="blank"></span></b>', answer:start+4*s,
+      explain:'Each number is '+s+' more than the one before: '+fmt(seq[3])+' + '+s+' = '+fmt(seq[3]+s)+'.'};
+  },
+  skipBack: function(){
+    var s=pick([2,5,10,100]), start=s*rnd(14,40)+(s===100?rnd(1,9)*10:0);
+    var seq=times(4, function(i){ return start-i*s; });
+    return {type:'num', prompt:'Count backwards by '+s+'s. What comes next?<br><b>'+seq.map(fmt).join(', ')+', <span class="blank"></span></b>', answer:start-4*s,
+      explain:'Going backwards, each number is '+s+' less: '+fmt(seq[3])+' '+MINUS+' '+s+' = '+fmt(seq[3]-s)+'.'};
+  },
+  skipRule: function(){
+    var s=rnd(3,9), st=s*rnd(1,4), seq=times(5, function(i){ return st+i*s; });
+    var opts=[s]; [s+1,s-1,2*s].forEach(function(x){ if (opts.indexOf(x)<0) opts.push(x); });
+    return {type:'mc', prompt:'What is the rule for this pattern?<br><b>'+seq.join(', ')+'</b>', choices:shuffle(opts).map(function(x){ return 'Add '+x; }), answer:'Add '+s,
+      explain:'Each number is '+s+' more than the one before, so the rule is add '+s+'. This is counting by '+s+'s.'};
+  },
+  skipNotSaid: function(){
+    var s=pick([3,4,5,10,25]), mults=shuffle([2,3,4,5,6,7,8,9,10,11,12]).slice(0,3).map(function(k){ return k*s; });
+    var odd=s*rnd(2,12)+rnd(1,s-1);
+    return {type:'mc', prompt:'Counting by '+s+'s from 0, which number will you <b>not</b> say?', choices:shuffle(mults.concat([odd])).map(String), answer:String(odd),
+      explain:fmt(Math.floor(odd/s)*s)+' and '+fmt(Math.ceil(odd/s)*s)+' are on the list, so '+odd+' gets jumped over. It is not a multiple of '+s+'.'};
+  },
+  skipTimes: function(){
+    var s=rnd(3,9), n=rnd(3,8);
+    return {type:'num', prompt:'Start at 0 and skip count by <b>'+s+'s</b>, <b>'+n+'</b> times. Where do you land?', answer:s*n,
+      explain:times(n, function(i){ return (i+1)*s; }).join(', ')+'. That is '+n+' '+TIMES+' '+s+' = '+(s*n)+'.'};
+  },
+  mulFact: function(){ var a=rnd(2,9), b=rnd(2,9); return {type:'num', prompt:'What is <b>'+a+' '+TIMES+' '+b+'</b>?', answer:a*b, explain:a+' groups of '+b+' make '+(a*b)+'.'}; },
+  mulArray: function(){
+    var r=rnd(2,5), c=rnd(3,8), right=r+' '+TIMES+' '+c+' = '+(r*c);
+    var vis='<div class="array small" style="grid-template-columns:repeat('+c+',16px)">'+new Array(r*c+1).join('<span class="dot" style="--pc:var(--c4)"></span>')+'</div>';
+    return {type:'mc', prompt:'Which number sentence matches this array?', visual:vis,
+      choices:shuffle([right, r+' + '+c+' = '+(r+c), r+' '+TIMES+' '+(c+1)+' = '+(r*(c+1)), (r+1)+' '+TIMES+' '+c+' = '+((r+1)*c)]), answer:right,
+      explain:'There are '+r+' rows with '+c+' dots in each row: '+r+' '+TIMES+' '+c+' = '+(r*c)+'.'};
+  },
+  mulBreak: function(){
+    var T=rnd(2,9), O=rnd(1,9), b=rnd(3,9), A=T*10+O;
+    return {type:'num', prompt:'Break apart to multiply:<br><b>'+A+' '+TIMES+' '+b+' = ('+(T*10)+' '+TIMES+' '+b+') + ('+O+' '+TIMES+' '+b+')</b><br>What is '+A+' '+TIMES+' '+b+'?', answer:A*b,
+      explain:(T*10)+' '+TIMES+' '+b+' = '+(T*10*b)+' and '+O+' '+TIMES+' '+b+' = '+(O*b)+'. Add them: '+(T*10*b)+' + '+(O*b)+' = '+(A*b)+'.'};
+  },
+  mul2x1: function(){
+    var A=rnd(12,99), b=rnd(2,9), T=Math.floor(A/10), O=A%10, c=Math.floor(O*b/10);
+    return {type:'num', prompt:'Multiply:', visual:stackHTML(A,b,TIMES), answer:A*b,
+      explain:'Ones: '+O+' '+TIMES+' '+b+' = '+(O*b)+(c?', write '+((O*b)%10)+' and carry '+c:'')+'. Tens: '+T+' '+TIMES+' '+b+' = '+(T*b)+(c?', plus '+c+' carried = '+(T*b+c):'')+'. Answer: '+(A*b)+'.'};
+  },
+  mulTurn: function(){
+    var a=rnd(3,9), b; do { b=rnd(3,9); } while (b===a);
+    return {type:'num', prompt:'If <b>'+a+' '+TIMES+' '+b+' = '+(a*b)+'</b>, what is <b>'+b+' '+TIMES+' '+a+'</b>?', answer:a*b,
+      explain:'Turning an array around does not change how many dots there are. Both are '+(a*b)+'.'};
+  },
+  mulWord: function(){
+    var A=rnd(12,49), b=rnd(2,9), t=pick([
+      ['Each box holds '+A+' crayons. How many crayons are in '+b+' boxes?','crayons'],
+      ['A bus has '+A+' seats. How many seats are there on '+b+' buses?','seats'],
+      ['Each pack has '+A+' stickers. '+esc(learnerName())+' buys '+b+' packs. How many stickers is that?','stickers']]);
+    return {type:'num', prompt:t[0], unit:t[1], answer:A*b, explain:b+' equal groups of '+A+': '+A+' '+TIMES+' '+b+' = '+(A*b)+' '+t[1]+'.'};
+  },
+  divFact: function(){ var b=rnd(2,9), q=rnd(2,9); return {type:'num', prompt:'What is <b>'+(b*q)+' '+DIVS+' '+b+'</b>?', answer:q, explain:b+' '+TIMES+' '+q+' = '+(b*q)+', so '+(b*q)+' '+DIVS+' '+b+' = '+q+'.'}; },
+  div2: function(){
+    var d=rnd(2,9), q=rnd(10,Math.floor(99/d)), a=q*d;
+    return {type:'num', prompt:'Divide: <b>'+a+' '+DIVS+' '+d+'</b>', answer:q, explain:'Share the tens first, then the ones. Check: '+d+' '+TIMES+' '+q+' = '+a+'.'};
+  },
+  divRem: function(){
+    var d,a; do { d=rnd(3,9); a=rnd(20,99); } while (a%d===0);
+    var q=Math.floor(a/d), r=a%d;
+    return {type:'qr', prompt:'Divide: <b>'+a+' '+DIVS+' '+d+'</b><br><span class="muted">Type the quotient and the remainder.</span>', answer:{q:q,r:r},
+      explain:d+' '+TIMES+' '+q+' = '+(d*q)+', and '+a+' '+MINUS+' '+(d*q)+' = '+r+' left over. So '+a+' '+DIVS+' '+d+' = '+q+' r'+r+'.'};
+  },
+  divNotRem: function(){
+    var d=rnd(3,9), good=shuffle(times(d, function(i){ return i; })).slice(0,3);
+    return {type:'mc', prompt:'When you divide by <b>'+d+'</b>, which of these can <b>not</b> be the remainder?', choices:shuffle(good.concat([d])).map(String), answer:String(d),
+      explain:'A remainder must be less than '+d+'. If '+d+' were left over, you could share them out one more time.'};
+  },
+  divCars: function(){
+    var k=rnd(3,8), n; do { n=rnd(20,70); } while (n%k===0);
+    return {type:'num', prompt:'<b>'+n+'</b> children are going on a trip. Each car holds <b>'+k+'</b> children. How many cars are needed so every child gets a ride?', unit:'cars', answer:Math.ceil(n/k),
+      explain:n+' '+DIVS+' '+k+' = '+Math.floor(n/k)+' r'+(n%k)+'. The '+(n%k)+' children left over need one more car, so '+Math.ceil(n/k)+' cars.'};
+  },
+  divFamily: function(){
+    var a=rnd(3,9), b; do { b=rnd(3,9); } while (b===a);
+    var c=a*b, trues=shuffle([a+' '+TIMES+' '+b+' = '+c, b+' '+TIMES+' '+a+' = '+c, c+' '+DIVS+' '+a+' = '+b, c+' '+DIVS+' '+b+' = '+a]).slice(0,3), bad=a+' '+DIVS+' '+b+' = '+c;
+    return {type:'mc', prompt:'Which fact is <b>not</b> in the fact family for <b>'+a+'</b>, <b>'+b+'</b> and <b>'+c+'</b>?', choices:shuffle(trues.concat([bad])), answer:bad,
+      explain:'In a division fact, the biggest number ('+c+') comes first. '+a+' '+DIVS+' '+b+' is not '+c+'.'};
+  },
+  divMissing: function(){
+    var d=rnd(2,9), q=rnd(2,9);
+    return {type:'num', prompt:'What number goes in the box?<br><b>'+(d*q)+'</b> '+DIVS+' <span class="blank"></span> = <b>'+q+'</b>', answer:d,
+      explain:'Think: '+q+' '+TIMES+' what = '+(d*q)+'? '+q+' '+TIMES+' '+d+' = '+(d*q)+', so the missing number is '+d+'.'};
+  }
+};
+function wordStory(){
+  var kind=pick(['add','sub','subc','mul','div','share']), A, B, o;
+  if (kind==='add'){ A=randNum(5); B=randNum(4); o={text:'A town had <b>'+fmt(A)+'</b> people. Then <b>'+fmt(B)+'</b> more people moved in. How many people live there now?', op:'Add', ans:A+B, unit:'people', clue:'Two amounts join together, so add.', eq:fmt(A)+' + '+fmt(B)+' = '+fmt(A+B)}; }
+  else if (kind==='sub'){ A=randNum(5); do { B=randNum(rnd(4,5)); } while (B>=A); o={text:'A shop had <b>'+fmt(A)+'</b> stickers. It sold <b>'+fmt(B)+'</b> of them. How many stickers are left?', op:'Subtract', ans:A-B, unit:'stickers', clue:'Some are taken away, so subtract.', eq:fmt(A)+' '+MINUS+' '+fmt(B)+' = '+fmt(A-B)}; }
+  else if (kind==='subc'){ do { A=randNum(4); B=randNum(4); } while (B>=A); o={text:'Rhea scored <b>'+fmt(A)+'</b> points in a game. Leo scored <b>'+fmt(B)+'</b> points. How many more points did Rhea score?', op:'Subtract', ans:A-B, unit:'points', clue:'<i>How many more</i> compares two amounts, so subtract.', eq:fmt(A)+' '+MINUS+' '+fmt(B)+' = '+fmt(A-B)}; }
+  else if (kind==='mul'){ A=rnd(12,49); B=rnd(2,9); o={text:'Each box holds <b>'+A+'</b> pencils. How many pencils are in <b>'+B+'</b> boxes?', op:'Multiply', ans:A*B, unit:'pencils', clue:'Equal groups put together, so multiply.', eq:A+' '+TIMES+' '+B+' = '+(A*B)}; }
+  else if (kind==='div'){ B=rnd(3,9); var q=rnd(4,Math.floor(99/B)); A=q*B; o={text:'<b>'+A+'</b> students are put into teams of <b>'+B+'</b>. How many teams are there?', op:'Divide', ans:q, unit:'teams', clue:'A total is split into equal groups, so divide.', eq:A+' '+DIVS+' '+B+' = '+q}; }
+  else { B=rnd(2,6); var q2=rnd(5,Math.floor(99/B)); A=q2*B; o={text:'<b>'+A+'</b> marbles are shared equally among <b>'+B+'</b> friends. How many marbles does each friend get?', op:'Divide', ans:q2, unit:'marbles', clue:'Sharing equally means divide.', eq:A+' '+DIVS+' '+B+' = '+q2}; }
+  return o;
+}
+G.wordOp = function(){ var s=wordStory(); return {type:'mc', prompt:s.text+'<br><span class="muted">Which operation solves this?</span>', choices:['Add','Subtract','Multiply','Divide'], answer:s.op, explain:s.clue+' '+s.eq+'.'}; };
+G.wordSolve = function(){ var s=wordStory(); return {type:'num', prompt:s.text, unit:s.unit, answer:s.ans, explain:s.clue+' '+s.eq+' '+s.unit+'.'}; };
+
+/* ---------- multi-step quiz templates ---------- */
+function planStr(a){ return a.map(function(o,k){ return k ? o.toLowerCase() : o; }).join(', then '); }
+var MS_T = [
+  function(){ var n=rnd(2,6), p=rnd(6,19), cost=n*p, bill=[20,50,100,200].filter(function(b){ return b>cost; })[0];
+    var it=pick([['comic','comics'],['toy car','toy cars'],['notebook','notebooks'],['ball','balls']]);
+    return {text:esc(learnerName())+' buys <b>'+n+'</b> '+it[1]+' for <b>$'+p+'</b> each and pays with a <b>$'+bill+'</b> note. How much change comes back?',
+      steps:['$'+p+' '+TIMES+' '+n+' = $'+cost, '$'+bill+' '+MINUS+' $'+cost+' = $'+(bill-cost)], ans:bill-cost, unit:'dollars',
+      first:'The cost of the '+it[1], final:'The change', decoy:'The cost of one '+it[0], plan:['Multiply','Subtract']}; },
+  function(){ var b=rnd(2,6), z=rnd(12,24), e=rnd(5,30), t=b*z;
+    return {text:'Each box has <b>'+z+'</b> pencils. A teacher has <b>'+b+'</b> boxes and <b>'+e+'</b> loose pencils. How many pencils are there altogether?',
+      steps:[z+' '+TIMES+' '+b+' = '+t, t+' + '+e+' = '+(t+e)], ans:t+e, unit:'pencils',
+      first:'How many pencils are in the boxes', final:'How many pencils there are altogether', decoy:'How many pencils are in one box', plan:['Multiply','Add']}; },
+  function(){ var d=rnd(2,6), q=rnd(10,Math.floor(99/d)), g=rnd(2,Math.min(9,q-3)), T=q*d;
+    return {text:'<b>'+T+'</b> cards are shared equally among <b>'+d+'</b> friends. Then each friend gives away <b>'+g+'</b> cards. How many cards does each friend have now?',
+      steps:[T+' '+DIVS+' '+d+' = '+q, q+' '+MINUS+' '+g+' = '+(q-g)], ans:q-g, unit:'cards',
+      first:'How many cards each friend gets', final:'How many cards each friend has now', decoy:'How many friends there are', plan:['Divide','Subtract']}; },
+  function(){ var z=rnd(3,9), bx=rnd(5,Math.floor(99/z)), sold=rnd(1,bx-1), T=bx*z;
+    return {text:'A baker made <b>'+T+'</b> cookies and packed <b>'+z+'</b> in each box. She sold <b>'+sold+'</b> boxes. How many boxes are left?',
+      steps:[T+' '+DIVS+' '+z+' = '+bx, bx+' '+MINUS+' '+sold+' = '+(bx-sold)], ans:bx-sold, unit:'boxes',
+      first:'How many boxes she packed', final:'How many boxes are left', decoy:'How many cookies are in one box', plan:['Divide','Subtract']}; },
+  function(){ var d=rnd(3,9), q=rnd(3,Math.floor(90/d)), lost=rnd(2,9), st=q*d+lost;
+    return {text:'There are <b>'+st+'</b> marbles in a jar. <b>'+lost+'</b> roll away. The rest are put into <b>'+d+'</b> bags with the same number in each. How many marbles are in each bag?',
+      steps:[st+' '+MINUS+' '+lost+' = '+(st-lost), (st-lost)+' '+DIVS+' '+d+' = '+q], ans:q, unit:'marbles',
+      first:'How many marbles are left in the jar', final:'How many marbles go in each bag', decoy:'How many bags there are', plan:['Subtract','Divide']}; },
+  function(){ var a=rnd(2,5), p1=rnd(6,25), b=rnd(2,4), p2=rnd(10,30), c1=a*p1, c2=b*p2;
+    return {text:'Mom buys <b>'+a+'</b> shirts for <b>$'+p1+'</b> each and <b>'+b+'</b> hats for <b>$'+p2+'</b> each. How much does she spend altogether?',
+      steps:['$'+p1+' '+TIMES+' '+a+' = $'+c1, '$'+p2+' '+TIMES+' '+b+' = $'+c2, '$'+c1+' + $'+c2+' = $'+(c1+c2)], ans:c1+c2, unit:'dollars',
+      first:'The cost of the shirts', final:'The total cost', decoy:'The cost of one hat', plan:['Multiply','Multiply','Add']}; },
+  function(){ var st=rnd(20,90)*1000+rnd(100,999), out=rnd(1500,Math.floor(st/2)), inn=rnd(300,4999), mid=st-out;
+    return {text:'A stadium had <b>'+fmt(st)+'</b> fans. At half-time <b>'+fmt(out)+'</b> fans left and <b>'+fmt(inn)+'</b> new fans came in. How many fans were there at the end?',
+      steps:[fmt(st)+' '+MINUS+' '+fmt(out)+' = '+fmt(mid), fmt(mid)+' + '+fmt(inn)+' = '+fmt(mid+inn)], ans:mid+inn, unit:'fans',
+      first:'How many fans stayed', final:'How many fans were there at the end', decoy:'How many new fans came in', plan:['Subtract','Add']}; },
+  function(){ var c, z, t, seat, P;
+    do { c=rnd(2,3); z=rnd(15,28); t=rnd(2,8); seat=rnd(6,9); P=c*z+t; } while (P>99);
+    var q=Math.floor(P/seat), r=P%seat, v=r?q+1:q;
+    var steps=[z+' '+TIMES+' '+c+' = '+(c*z), (c*z)+' + '+t+' = '+P, P+' '+DIVS+' '+seat+' = '+q+(r?' r'+r:'')];
+    if (r) steps.push('the '+r+' left over need one more van, so '+v+' vans');
+    return {text:'<b>'+c+'</b> classes with <b>'+z+'</b> students each are going on a trip, with <b>'+t+'</b> teachers. Each van holds <b>'+seat+'</b> people. How many vans are needed?',
+      steps:steps, ans:v, unit:'vans', first:'How many students are going', final:'How many vans are needed', decoy:'How many students are in one class', plan:['Multiply','Add','Divide']}; },
+  function(){ var per=rnd(12,25), days=rnd(3,6), read=per*days, tot=read+rnd(2,9)*10;
+    return {text:esc(learnerName())+' reads <b>'+per+'</b> pages every day for <b>'+days+'</b> days. The book has <b>'+tot+'</b> pages. How many pages are still left to read?',
+      steps:[per+' '+TIMES+' '+days+' = '+read, tot+' '+MINUS+' '+read+' = '+(tot-read)], ans:tot-read, unit:'pages',
+      first:'How many pages have been read', final:'How many pages are left', decoy:'How many pages are read in one day', plan:['Multiply','Subtract']}; }
+];
+G.msSolve = function(){ var t=pick(MS_T)(); return {type:'num', prompt:t.text, unit:t.unit, answer:t.ans,
+  explain:t.steps.map(function(x,k){ return 'Step '+(k+1)+': '+x; }).join('. ')+'.'}; };
+G.msFirst = function(){ var t=pick(MS_T)();
+  return {type:'mc', prompt:t.text+'<br><span class="muted">What should you find <b>first</b>?</span>', choices:shuffle([t.first,t.final,t.decoy]), answer:t.first,
+    explain:'Start with: '+t.first.charAt(0).toLowerCase()+t.first.slice(1)+'. “'+t.final+'” is the question at the end, and “'+t.decoy+'” is already in the story.'}; };
+G.msPlan = function(){ var t=pick(MS_T)(), right=planStr(t.plan), names=['Add','Subtract','Multiply','Divide'], c=[right];
+  var rev=planStr(t.plan.slice().reverse()); if (c.indexOf(rev)<0) c.push(rev);
+  var guard=0; while (c.length<4 && guard++<50){ var a=t.plan.slice(); a[rnd(0,a.length-1)]=pick(names); var x=planStr(a); if (c.indexOf(x)<0) c.push(x); }
+  return {type:'mc', prompt:t.text+'<br><span class="muted">Which plan solves this story?</span>', choices:shuffle(c), answer:right,
+    explain:right+'. '+t.steps.map(function(x,k){ return 'Step '+(k+1)+': '+x; }).join('. ')+'.'}; };
+
+/* ---------- area & perimeter quiz ---------- */
+var AP_UNITS=['cm','m','ft'];
+G.apCount = function(){ var r=rnd(2,6), c=rnd(3,8);
+  return {type:'num', prompt:'What is the area of this rectangle? Each square is 1 square unit.', visual:gridSVG(r,c), unit:'square units', answer:r*c,
+    explain:r+' rows of '+c+' squares: '+r+' '+TIMES+' '+c+' = '+(r*c)+' square units.'}; };
+G.apArea = function(){ var u=pick(AP_UNITS), L=pick([rnd(3,9), rnd(11,25)]), W=rnd(2,9); if (L>9 && W>7) W=rnd(2,7);
+  return {type:'num', prompt:'Find the area.', visual:rectSVG(L,W,u), unit:'square '+u, answer:L*W,
+    explain:'Area = length '+TIMES+' width = '+L+' '+TIMES+' '+W+' = '+(L*W)+' square '+u+'.'}; };
+G.apPerim = function(){ var u=pick(AP_UNITS), L=rnd(4,25), W=rnd(2,Math.min(12,L-1));
+  return {type:'num', prompt:'Find the perimeter.', visual:rectSVG(L,W,u,{perim:true}), unit:u, answer:2*(L+W),
+    explain:L+' + '+W+' + '+L+' + '+W+' = '+(2*(L+W))+' '+u+'. Opposite sides are equal, so add all four.'}; };
+G.apSquare = function(){ var u=pick(AP_UNITS), s=rnd(3,9), area=Math.random()<.5;
+  return {type:'num', prompt:'This is a square. Find its <b>'+(area?'area':'perimeter')+'</b>.', visual:rectSVG(s,s,u,{square:true, perim:!area}), unit:(area?'square ':'')+u, answer:area? s*s : 4*s,
+    explain: area ? 'Area = '+s+' '+TIMES+' '+s+' = '+(s*s)+' square '+u+'.' : 'All 4 sides are '+s+': 4 '+TIMES+' '+s+' = '+(4*s)+' '+u+'.'}; };
+var AP_JOBS=[['Carpet to cover a floor','Area'],['A fence around a garden','Perimeter'],['Paint for a wall','Area'],['A frame around a photo','Perimeter'],['Grass seed for a lawn','Area'],['Ribbon around the edge of a card','Perimeter'],['Tiles for a bathroom floor','Area'],['A border around a bulletin board','Perimeter'],['Wrapping paper to cover a book','Area'],['Walking once around a park','Perimeter']];
+G.apChoose = function(){ var j=pick(AP_JOBS);
+  return {type:'mc', prompt:'<b>'+j[0]+'</b><br><span class="muted">Do you need the area or the perimeter?</span>', choices:['Area','Perimeter'], answer:j[1],
+    explain: j[1]==='Area' ? 'It covers the inside, so it is area (square units).' : 'It goes around the edge, so it is perimeter (units).'}; };
+G.apMissArea = function(){ var u=pick(AP_UNITS), a=rnd(2,9), b=rnd(3,9), A=a*b;
+  return {type:'num', prompt:'A rectangle has an area of <b>'+A+' square '+u+'</b>. One side is <b>'+a+' '+u+'</b>. How long is the other side?', visual:rectSVG(b,a,u,{top:'?', side:a+' '+u, inside:['Area = '+A+' sq '+u]}), unit:u, answer:b,
+    explain:'Think '+a+' '+TIMES+' ? = '+A+'. '+a+' '+TIMES+' '+b+' = '+A+', so the side is '+A+' '+DIVS+' '+a+' = '+b+' '+u+'.'}; };
+G.apMissPerim = function(){ var u=pick(AP_UNITS), L=rnd(5,15), W=rnd(2,Math.min(9,L-1)), P=2*(L+W);
+  return {type:'num', prompt:'A rectangle has a perimeter of <b>'+P+' '+u+'</b>. The length is <b>'+L+' '+u+'</b>. What is the width?', visual:rectSVG(L,W,u,{top:L+' '+u, side:'?', inside:['Perimeter = '+P+' '+u], perim:true}), unit:u, answer:W,
+    explain:'The two lengths make '+L+' + '+L+' = '+(2*L)+'. That leaves '+P+' '+MINUS+' '+(2*L)+' = '+(2*W)+' for the two widths, so each width is '+(2*W)+' '+DIVS+' 2 = '+W+' '+u+'.'}; };
+G.apSame = function(){ var N=pick([12,16,18,24,36]), pairs=[]; for (var a=1;a*a<=N;a++) if (N%a===0) pairs.push([a,N/a]);
+  var big=Math.random()<.6, chosen=shuffle(pairs).slice(0,Math.min(4,pairs.length));
+  var per=function(p){ return 2*(p[0]+p[1]); };
+  var best=chosen.reduce(function(m,p){ return (big? per(p)>per(m) : per(p)<per(m)) ? p : m; });
+  var label=function(p){ return p[0]+' '+TIMES+' '+p[1]; };
+  return {type:'mc', prompt:'Each rectangle has an area of <b>'+N+' square units</b>. Which one has the <b>'+(big?'greatest':'smallest')+' perimeter</b>?', choices:chosen.map(label), answer:label(best),
+    explain:chosen.map(function(p){ return label(p)+' has perimeter '+per(p); }).join(', ')+'. '+(big?'Long and thin goes the longest way round.':'The most square-like one goes the shortest way round.')}; };
+G.apL = function(){ var u=pick(AP_UNITS), W=rnd(6,10), H=rnd(5,9), w2=rnd(2,W-3), h2=rnd(2,H-3);
+  var a1=w2*H, a2=(W-w2)*h2;
+  return {type:'num', prompt:'Find the area of this L-shape. Split it into two rectangles first.', visual:LSVG(W,H,w2,h2,u), unit:'square '+u, answer:a1+a2,
+    explain:'Cut down: '+w2+' '+TIMES+' '+H+' = '+a1+'. The bottom part is '+W+' '+MINUS+' '+w2+' = '+(W-w2)+' wide, so '+(W-w2)+' '+TIMES+' '+h2+' = '+a2+'. Total: '+a1+' + '+a2+' = '+(a1+a2)+' square '+u+'.'}; };
+G.apLPerim = function(){ var u=pick(AP_UNITS), W=rnd(6,10), H=rnd(5,9), w2=rnd(2,W-3), h2=rnd(2,H-3);
+  return {type:'num', prompt:'Find the perimeter of this L-shape. Work out the two missing sides first.', visual:LSVG(W,H,w2,h2,u,{missing:true, perim:true}), unit:u, answer:2*(W+H),
+    explain:'Missing sides: '+W+' '+MINUS+' '+w2+' = '+(W-w2)+' and '+H+' '+MINUS+' '+h2+' = '+(H-h2)+'. Add all 6: '+[W,h2,W-w2,H-h2,w2,H].join(' + ')+' = '+(2*(W+H))+' '+u+'.'}; };
+G.apWord = function(){
+  if (Math.random()<.5){ var L=rnd(4,9), W=rnd(3,6), p=rnd(2,5), A=L*W;
+    return {type:'num', prompt:'A floor is <b>'+L+' m</b> long and <b>'+W+' m</b> wide. Each square metre needs 1 tile. Tiles cost <b>$'+p+'</b> each. How much do all the tiles cost?', unit:'dollars', answer:A*p,
+      explain:'Tiles cover the floor, so find the area first: '+L+' '+TIMES+' '+W+' = '+A+' tiles. Then '+A+' '+TIMES+' $'+p+' = $'+(A*p)+'.'}; }
+  var L2=rnd(6,15), W2=rnd(3,9), P=2*(L2+W2), c=rnd(2,4);
+  return {type:'num', prompt:'A garden is <b>'+L2+' m</b> long and <b>'+W2+' m</b> wide. Fencing costs <b>$'+c+'</b> for each metre. How much does it cost to fence the whole garden?', unit:'dollars', answer:P*c,
+    explain:'A fence goes around, so find the perimeter first: '+L2+' + '+W2+' + '+L2+' + '+W2+' = '+P+' m. Then '+P+' '+TIMES+' $'+c+' = $'+(P*c)+'.'}; };
+
+/* ================= MODULES ================= */
+/* ================= AREA & PERIMETER WORKSHOP: learn panels ================= */
+function apPanelBuild(root, focus){
+  var r=3, c=5, anim=null;
+  var stage=h('div',{class:'apstage'}), readA=h('p',{class:'say'}), readP=h('p',{class:'say'});
+  var rs=h('input',{type:'range',min:1,max:10,value:r,'aria-label':'Rows'}), cs=h('input',{type:'range',min:1,max:10,value:c,'aria-label':'Columns'});
+  var rl=h('b'), cl=h('b');
+  rs.addEventListener('input', function(){ r=+rs.value; draw(); });
+  cs.addEventListener('input', function(){ c=+cs.value; draw(); });
+  function stop(){ if (anim){ clearInterval(anim); anim=null; } }
+  function draw(mode){
+    stop(); rl.textContent=r; cl.textContent=c;
+    var cell=Math.min(44, Math.floor(440/c), Math.floor(300/r)), W=c*cell, H=r*cell, pad=14;
+    var svg=document.createElementNS(SVGNS,'svg');
+    svg.setAttribute('viewBox','0 0 '+(W+2*pad)+' '+(H+2*pad)); svg.setAttribute('width',W+2*pad); svg.setAttribute('height',H+2*pad);
+    svg.setAttribute('class','apsvg'); svg.setAttribute('role','img'); svg.setAttribute('aria-label', r+' rows of '+c+' squares');
+    var cells=[];
+    for (var i=0;i<r;i++) for (var j=0;j<c;j++){
+      var rc=document.createElementNS(SVGNS,'rect');
+      rc.setAttribute('x',pad+j*cell); rc.setAttribute('y',pad+i*cell); rc.setAttribute('width',cell); rc.setAttribute('height',cell);
+      rc.setAttribute('style', (mode==='count' || focus==='perim') ? 'fill:var(--card)' : 'fill:var(--c0)'); rc.setAttribute('stroke', focus==='perim' ? 'var(--line)' : 'currentColor'); rc.setAttribute('stroke-width','2');
+      var tx=document.createElementNS(SVGNS,'text');
+      tx.setAttribute('x',pad+j*cell+cell/2); tx.setAttribute('y',pad+i*cell+cell/2+5); tx.setAttribute('text-anchor','middle');
+      tx.setAttribute('font-size', Math.max(10, Math.min(15, Math.round(cell/2.6)))); tx.setAttribute('font-weight','700'); tx.setAttribute('fill','currentColor');
+      svg.appendChild(rc); svg.appendChild(tx); cells.push({rc:rc,tx:tx});
+    }
+    var segs=[];
+    function seg(x1,y1,x2,y2){ var l=document.createElementNS(SVGNS,'line'); l.setAttribute('x1',x1); l.setAttribute('y1',y1); l.setAttribute('x2',x2); l.setAttribute('y2',y2);
+      l.setAttribute('stroke', mode==='walk' ? 'var(--line)' : (focus==='perim' ? 'var(--c6)' : 'currentColor')); l.setAttribute('stroke-width', mode==='walk' || focus==='perim' ? 7 : 4); l.setAttribute('stroke-linecap','round'); svg.appendChild(l); segs.push(l); }
+    var a, b;
+    for (a=0;a<c;a++) seg(pad+a*cell, pad, pad+(a+1)*cell, pad);
+    for (b=0;b<r;b++) seg(pad+W, pad+b*cell, pad+W, pad+(b+1)*cell);
+    for (a=c;a>0;a--) seg(pad+a*cell, pad+H, pad+(a-1)*cell, pad+H);
+    for (b=r;b>0;b--) seg(pad, pad+b*cell, pad, pad+(b-1)*cell);
+    stage.innerHTML=''; stage.append(svg);
+    readA.innerHTML='<b>Area:</b> '+r+' row'+(r>1?'s':'')+' of '+c+' = '+r+' '+TIMES+' '+c+' = <b>'+(r*c)+' square units</b>';
+    readP.innerHTML='<b>Perimeter:</b> '+c+' + '+r+' + '+c+' + '+r+' = <b>'+(2*(r+c))+' units</b>';
+    if (mode==='count'){
+      var k=0; readA.innerHTML='<b>Counting squares…</b>';
+      var step=function(){ if (k>=cells.length){ stop(); readA.innerHTML='<b>Area:</b> '+(r*c)+' squares. That is '+r+' '+TIMES+' '+c+' = <b>'+(r*c)+' square units</b>'; return; }
+        cells[k].rc.setAttribute('style','fill:var(--c0)'); cells[k].rc.setAttribute('stroke','currentColor'); cells[k].tx.textContent=String(k+1); k++; };
+      if (reduceMotion){ while (k<cells.length) step(); step(); } else anim=setInterval(step, Math.max(40, Math.round(1600/cells.length)));
+    }
+    if (mode==='walk'){
+      var q=0; readP.innerHTML='<b>Walking around…</b>';
+      var step2=function(){ if (q>=segs.length){ stop(); readP.innerHTML='<b>Perimeter:</b> '+segs.length+' units all the way round. That is '+c+' + '+r+' + '+c+' + '+r+' = <b>'+(2*(r+c))+' units</b>'; return; }
+        segs[q].setAttribute('stroke','var(--c6)'); q++; readP.innerHTML='<b>Walking around… '+q+'</b>'; };
+      if (reduceMotion){ while (q<segs.length) step2(); step2(); } else anim=setInterval(step2, Math.max(60, Math.round(2000/segs.length)));
+    }
+  }
+  var title = focus==='perim' ? 'Walk around the edge' : 'Count the squares inside';
+  var hint = focus==='perim'
+    ? 'Perimeter is the distance all the way around a shape. Each orange piece of edge is 1 unit long. Change the size, then walk around it.'
+    : 'Area is how many unit squares cover a shape. Change the size, then count. Counting row by row is the same as rows × columns.';
+  var btns = focus==='perim'
+    ? [h('button',{class:'btn ap-p', onclick:function(){ draw('walk'); }},'Walk around the edge')]
+    : [h('button',{class:'btn ap-a', onclick:function(){ draw('count'); }},'Count the squares')];
+  root.append(h('section',{class:'panel'},
+    h('h2',{},title), h('p',{class:'hint'},hint),
+    h('div',{class:'two-col'},
+      h('div',{},
+        h('div',{class:'sliders'}, h('span',{},'Rows'), rs, rl, h('span',{},'Columns'), cs, cl),
+        focus==='perim' ? readP : readA, focus==='perim' ? null : null,
+        h('div',{class:'step-actions', style:'margin-top:14px'}, btns)),
+      h('div',{class:'scroll-x'}, stage))));
+  draw();
+}
+
+function apPanelUnits(root){
+  root.append(h('section',{class:'panel'},
+    h('h2',{},'Units matter'),
+    h('div',{class:'two-col'},
+      h('div',{class:'sidecard'},
+        h('div',{class:'apbig ap-area'}, h('b',{},'AREA'), h('span',{},'covers the inside'), h('span',{},'counted in squares'), h('em',{},'square cm, square m, square ft')),
+        h('p',{class:'hint'},'A unit square is 1 unit long on every side. If each side is 1 cm, it is 1 square cm.')),
+      h('div',{class:'sidecard'},
+        h('div',{class:'apbig ap-perim'}, h('b',{},'PERIMETER'), h('span',{},'goes around the edge'), h('span',{},'counted in lengths'), h('em',{},'cm, m, ft')),
+        h('p',{class:'hint'},'Perimeter is a length, like a piece of string laid around the shape. So it has no “square”.')))));
+}
+
+function apPanelPoly(root){
+  var SH=[[5,3,4],[6,4,6,4],[3,5,4,6,2],[4,3,5,2,6,4]], k=0;
+  var chips=h('div',{class:'chips'}), fig=h('div',{class:'apstage'}), say=h('div',{class:'sidecard'}), done=0;
+  function draw(){
+    chips.innerHTML='';
+    SH.forEach(function(s,i){ chips.append(h('button',{class:'chip'+(i===k?' on':''), onclick:function(){ k=i; done=0; draw(); }}, s.length+' sides')); });
+    var s=SH[k];
+    fig.innerHTML=polySVG(s,'cm',{perim:true, upto:done});
+    say.innerHTML='';
+    var run=s.slice(0,done), tot=run.reduce(function(a,b){ return a+b; },0);
+    say.append(h('p',{class:'say', html: done ? 'Added so far: '+run.join(' + ')+' = <b>'+tot+'</b>' : 'Start at any corner and add each side as you go round.'}));
+    if (done===s.length) say.append(h('p',{class:'say done', html:'All '+s.length+' sides. Perimeter = <b>'+tot+' cm</b>'}));
+    say.append(h('div',{class:'step-actions'},
+      h('button',{class:'btn ap-p', disabled:done===s.length, onclick:function(){ done++; draw(); }}, done ? 'Next side' : 'First side'),
+      h('button',{class:'btn ghost', onclick:function(){ done=0; draw(); }}, 'Start again')));
+  }
+  root.append(h('section',{class:'panel'},
+    h('h2',{},'Any shape: add every side'),
+    h('p',{class:'hint'},'Perimeter works for any shape with straight sides. Tick off each side so you never miss one or count one twice.'),
+    chips, h('div',{class:'two-col'}, h('div',{class:'scroll-x'}, fig), say)));
+  draw();
+}
+
+var AP_SORT=[['Carpet for a bedroom floor','Area','The carpet covers the floor.'],['A fence around a garden','Perimeter','The fence goes around the edge.'],
+  ['Paint for a wall','Area','Paint covers the wall.'],['A frame around a picture','Perimeter','The frame goes around the edge.'],
+  ['Grass to cover a field','Area','Grass covers the field.'],['Lace around a tablecloth','Perimeter','The lace goes around the edge.'],
+  ['Tiles for a kitchen floor','Area','Tiles cover the floor.'],['Running once around a track','Perimeter','You go around the edge.']];
+function apPanelSort(root){
+  var cards=h('div',{class:'sortgrid'}), score=h('p',{class:'say'}), got={};
+  function upd(){ var n=Object.keys(got).length; score.innerHTML=n===AP_SORT.length ? '<b>All '+n+' sorted!</b> Inside means area. Around means perimeter.' : n+' of '+AP_SORT.length+' sorted.'; if (n===AP_SORT.length) confetti(); }
+  AP_SORT.forEach(function(j,i){
+    var fb=h('p',{class:'sortfb'}), card=h('div',{class:'sortcard'});
+    function choose(v, b){
+      if (got[i]) return;
+      if (v===j[1]){ got[i]=1; card.classList.add(v==='Area'?'is-area':'is-perim'); fb.textContent='Yes! '+j[2]; upd(); }
+      else { b.classList.add('wrong'); fb.textContent='Not quite. Does it cover the inside or go around the edge?'; }
+    }
+    var bA=h('button',{class:'btn small'},'Area'), bP=h('button',{class:'btn small'},'Perimeter');
+    bA.addEventListener('click', function(){ choose('Area', bA); }); bP.addEventListener('click', function(){ choose('Perimeter', bP); });
+    card.append(h('b',{},j[0]), h('div',{class:'step-actions'}, bA, bP), fb);
+    cards.append(card);
+  });
+  root.append(h('section',{class:'panel'},
+    h('h2',{},'Inside or around?'),
+    h('p',{class:'hint'},'For each job, ask: does it cover the inside (area) or go around the edge (perimeter)?'),
+    cards, score));
+  upd();
+}
+
+function apPanelSame(root){
+  var N=12, chips=h('div',{class:'chips'}), list=h('div',{class:'aplist'}), note=h('p',{class:'say'});
+  function drawN(){
+    chips.innerHTML='';
+    [12,16,18,24,36].forEach(function(n){ chips.append(h('button',{class:'chip'+(n===N?' on':''), onclick:function(){ N=n; drawN(); }}, 'Area '+n)); });
+    var pairs=[]; for (var a=1;a*a<=N;a++) if (N%a===0) pairs.push([a,N/a]);
+    var ps=pairs.map(function(p){ return 2*(p[0]+p[1]); }), mx=Math.max.apply(null,ps), mn=Math.min.apply(null,ps);
+    list.innerHTML='';
+    pairs.forEach(function(p,k){
+      var tag = ps[k]===mx ? 'Longest way round' : ps[k]===mn ? 'Shortest way round' : '';
+      var card=h('div',{class:'apcard'+(tag?' tagged':'')});
+      card.innerHTML=gridSVG(p[0],p[1],{cell:Math.min(24, Math.floor(260/p[1])), perim:true})+
+        '<p><b>'+p[0]+' '+TIMES+' '+p[1]+'</b></p><p>Area '+N+'</p><p><b>Perimeter '+ps[k]+'</b></p>'+(tag?'<p class="aptag">'+tag+'</p>':'');
+      list.append(card);
+    });
+    note.innerHTML='Every rectangle here covers exactly <b>'+N+' squares</b>, but the perimeters go from '+mn+' to '+mx+'. Long and thin means a longer way round. The closer to a square, the shorter the way round.';
+  }
+  root.append(h('section',{class:'panel'},
+    h('h2',{},'Same area, different perimeter'),
+    h('p',{class:'hint'},'Pick an area to see every rectangle that uses exactly that many squares.'),
+    chips, h('div',{class:'scroll-x'}, list), note));
+  drawN();
+}
+
+function apPanelMissArea(root){
+  var EX=[[4,28,'cm'],[3,24,'m'],[6,42,'ft'],[5,35,'cm']], k=0, cols=0;
+  var chips=h('div',{class:'chips'}), fig=h('div',{class:'apstage'}), say=h('div',{class:'sidecard'});
+  function draw(){
+    var a=EX[k][0], A=EX[k][1], u=EX[k][2], b=A/a;
+    chips.innerHTML='';
+    EX.forEach(function(e,i){ chips.append(h('button',{class:'chip'+(i===k?' on':''), onclick:function(){ k=i; cols=0; draw(); }}, 'Area '+e[1])); });
+    fig.innerHTML = cols ? gridSVG(a, cols, {cell:Math.min(34, Math.floor(320/Math.max(cols,b)))}) : rectSVG(b, a, u, {top:'?', side:a+' '+u, inside:['Area = '+A+' sq '+u]});
+    say.innerHTML='';
+    say.append(h('p',{class:'say', html:'The area is <b>'+A+' square '+u+'</b> and one side is <b>'+a+' '+u+'</b>. So '+a+' '+TIMES+' ? = '+A+'.'}));
+    if (cols) say.append(h('p',{class:'say', html:'Columns of '+a+': '+Array.apply(null,{length:cols}).map(function(_,i){ return a*(i+1); }).join(', ')}));
+    if (cols===b) say.append(h('p',{class:'say done', html:cols+' columns make '+A+'. The missing side is <b>'+b+' '+u+'</b>. ('+A+' '+DIVS+' '+a+' = '+b+')'}));
+    say.append(h('div',{class:'step-actions'},
+      h('button',{class:'btn ap-a', disabled:cols===b, onclick:function(){ cols++; draw(); }}, 'Add a column of '+a),
+      h('button',{class:'btn ghost', onclick:function(){ cols=0; draw(); }}, 'Start again')));
+  }
+  root.append(h('section',{class:'panel'},
+    h('h2',{},'Missing side from the area'),
+    h('p',{class:'hint'},'Skip count by the side you know until you reach the area. The number of jumps is the missing side.'),
+    chips, h('div',{class:'two-col'}, h('div',{class:'scroll-x'}, fig), say)));
+  draw();
+}
+
+function apPanelMissPerim(root){
+  var EX=[[8,26,'m'],[10,32,'cm'],[6,20,'ft']], k=0, st=0;
+  var chips=h('div',{class:'chips'}), fig=h('div',{class:'apstage'}), say=h('div',{class:'sidecard'});
+  function draw(){
+    var L=EX[k][0], P=EX[k][1], u=EX[k][2], W=(P-2*L)/2;
+    chips.innerHTML='';
+    EX.forEach(function(e,i){ chips.append(h('button',{class:'chip'+(i===k?' on':''), onclick:function(){ k=i; st=0; draw(); }}, 'Perimeter '+e[1])); });
+    fig.innerHTML=rectSVG(L, W, u, {top:L+' '+u, side: st>=3 ? W+' '+u : '?', inside:['Perimeter = '+P+' '+u], perim:true});
+    var lines=['The perimeter is <b>'+P+' '+u+'</b>. The length is <b>'+L+' '+u+'</b>. A rectangle has 2 lengths and 2 widths.',
+      'Two lengths: '+L+' + '+L+' = <b>'+(2*L)+'</b>',
+      'What is left for the two widths: '+P+' '+MINUS+' '+(2*L)+' = <b>'+(2*W)+'</b>',
+      'One width: '+(2*W)+' '+DIVS+' 2 = <b>'+W+' '+u+'</b>'];
+    say.innerHTML='';
+    for (var i=0;i<=st;i++) say.append(h('p',{class:'say'+(i===3?' done':''), html:lines[i]}));
+    if (st===3) say.append(h('p',{class:'hint'},'Check: '+L+' + '+W+' + '+L+' + '+W+' = '+P+'.'));
+    say.append(h('div',{class:'step-actions'},
+      h('button',{class:'btn ap-p', disabled:st===3, onclick:function(){ st++; draw(); }}, 'Next step'),
+      h('button',{class:'btn ghost', onclick:function(){ st=0; draw(); }}, 'Start again')));
+  }
+  root.append(h('section',{class:'panel'},
+    h('h2',{},'Missing side from the perimeter'),
+    h('p',{class:'hint'},'Take away the sides you know. Then share what is left between the two sides you don’t know.'),
+    chips, h('div',{class:'two-col'}, h('div',{class:'scroll-x'}, fig), say)));
+  draw();
+}
+
+function apPanelL(root){
+  var LS=[[10,8,4,3,'m'],[9,7,3,4,'cm'],[8,6,3,2,'ft']], li=0, mode='none', showMiss=false, tried={};
+  var lchips=h('div',{class:'chips'}), lfig=h('div',{class:'apstage'}), lsay=h('div',{class:'sidecard'});
+  function drawL(){
+    var L=LS[li], W=L[0], H=L[1], w2=L[2], h2=L[3], u=L[4];
+    lchips.innerHTML='';
+    LS.forEach(function(x,k){ lchips.append(h('button',{class:'chip'+(k===li?' on':''), onclick:function(){ li=k; mode='none'; showMiss=false; drawL(); }}, 'Shape '+(k+1))); });
+    lfig.innerHTML=LSVG(W,H,w2,h2,u,{split: mode==='none'?null:mode, missing:true, reveal:showMiss, perim:showMiss});
+    var a1, a2, t1, t2;
+    if (mode==='down'){ a1=w2*H; a2=(W-w2)*h2; t1='Tall part: '+w2+' '+TIMES+' '+H+' = '+a1; t2='Bottom part: '+(W-w2)+' '+TIMES+' '+h2+' = '+a2+' (it is '+W+' '+MINUS+' '+w2+' = '+(W-w2)+' wide)'; }
+    if (mode==='across'){ a1=W*h2; a2=w2*(H-h2); t1='Bottom strip: '+W+' '+TIMES+' '+h2+' = '+a1; t2='Top part: '+w2+' '+TIMES+' '+(H-h2)+' = '+a2+' (it is '+H+' '+MINUS+' '+h2+' = '+(H-h2)+' tall)'; }
+    lsay.innerHTML='';
+    if (mode==='none') lsay.append(h('p',{class:'say'},'Where could you cut this L into two rectangles? Try both ways.'));
+    else {
+      tried[li+':'+mode]=1;
+      lsay.append(h('p',{class:'say'}, t1), h('p',{class:'say'}, t2), h('p',{class:'say done', html:'Area = '+a1+' + '+a2+' = <b>'+(a1+a2)+' square '+u+'</b>'}));
+      if (tried[li+':down'] && tried[li+':across']) lsay.append(h('p',{class:'hint'},'Both cuts give the same area. Cut whichever way is easier!'));
+    }
+    if (showMiss) lsay.append(h('p',{class:'say', html:'Hidden sides: '+W+' '+MINUS+' '+w2+' = '+(W-w2)+' and '+H+' '+MINUS+' '+h2+' = '+(H-h2)+'.<br>Perimeter = '+[W,h2,W-w2,H-h2,w2,H].join(' + ')+' = <b>'+(2*(W+H))+' '+u+'</b>'}));
+  }
+  root.append(h('section',{class:'panel'},
+    h('h2',{},'Split an L-shape'),
+    h('p',{class:'hint'},'An L-shape is two rectangles stuck together. Cut it, find each area, then add. For the perimeter, work out the two hidden sides first.'),
+    lchips,
+    h('div',{class:'two-col'}, h('div',{class:'scroll-x'}, lfig),
+      h('div',{}, lsay, h('div',{class:'step-actions', style:'margin-top:14px'},
+        h('button',{class:'btn ap-a', onclick:function(){ mode='down'; drawL(); }},'Cut down'),
+        h('button',{class:'btn ap-a', onclick:function(){ mode='across'; drawL(); }},'Cut across'),
+        h('button',{class:'btn ap-p', onclick:function(){ showMiss=!showMiss; drawL(); }},'Find the perimeter'))))));
+  drawL();
+}
+
+var AP_STORIES=[
+  {text:'A floor is <b>7 m</b> long and <b>4 m</b> wide. Each square metre needs 1 tile. Tiles cost <b>$5</b> each. How much do all the tiles cost?', kind:'Area', L:7, W:4, rate:5, u:'m',
+   why:'Tiles cover the floor, so find the area first.', s2:function(x){ return x+' tiles '+TIMES+' $5 = <b>$'+(x*5)+'</b>'; }},
+  {text:'A garden is <b>10 m</b> long and <b>6 m</b> wide. Fencing costs <b>$2</b> for each metre. How much does it cost to fence the whole garden?', kind:'Perimeter', L:10, W:6, rate:2, u:'m',
+   why:'A fence goes around the edge, so find the perimeter first.', s2:function(x){ return x+' m '+TIMES+' $2 = <b>$'+(x*2)+'</b>'; }},
+  {text:'A photo is <b>8 in</b> long and <b>5 in</b> wide. Mia puts ribbon around the edge. Ribbon comes on rolls of <b>13 in</b>. How many rolls does she need?', kind:'Perimeter', L:8, W:5, rate:13, u:'in',
+   why:'Ribbon goes around the edge, so find the perimeter first.', s2:function(x){ return x+' '+DIVS+' 13 = <b>'+(x/13)+' rolls</b>'; }}
+];
+function apPanelStories(root){
+  var k=0, st=0, wrongMsg='';
+  var chips=h('div',{class:'chips'}), box=h('div',{class:'sidecard'});
+  function draw(){
+    var s=AP_STORIES[k], first = s.kind==='Area' ? s.L*s.W : 2*(s.L+s.W);
+    chips.innerHTML='';
+    AP_STORIES.forEach(function(x,i){ chips.append(h('button',{class:'chip'+(i===k?' on':''), onclick:function(){ k=i; st=0; wrongMsg=''; draw(); }}, 'Story '+(i+1))); });
+    box.innerHTML='';
+    box.append(h('p',{class:'story', html:s.text}));
+    if (st===0){
+      box.append(h('p',{class:'say'},'Step 1: what do you need to find first?'));
+      var bA=h('button',{class:'btn ap-a'},'Area'), bP=h('button',{class:'btn ap-p'},'Perimeter');
+      [bA,bP].forEach(function(b){ b.addEventListener('click', function(){ if (b.textContent===s.kind){ st=1; wrongMsg=''; } else wrongMsg='Not quite. Does it cover the inside or go around the edge?'; draw(); }); });
+      box.append(h('div',{class:'step-actions'}, bA, bP));
+      if (wrongMsg) box.append(h('p',{class:'feedback bad'}, wrongMsg));
+      return;
+    }
+    box.append(h('p',{class:'say', html:'<b>'+s.kind+'.</b> '+s.why}));
+    box.append(h('p',{class:'say', html: s.kind==='Area' ? 'Step 1: '+s.L+' '+TIMES+' '+s.W+' = <b>'+first+'</b>' : 'Step 1: '+s.L+' + '+s.W+' + '+s.L+' + '+s.W+' = <b>'+first+' '+s.u+'</b>'}));
+    if (st>=2) box.append(h('p',{class:'say done', html:'Step 2: '+s.s2(first)}));
+    box.append(h('div',{class:'step-actions'},
+      h('button',{class:'btn', disabled:st===2, onclick:function(){ st=2; draw(); }},'Show step 2'),
+      h('button',{class:'btn ghost', onclick:function(){ st=0; draw(); }},'Start again')));
+  }
+  root.append(h('section',{class:'panel'},
+    h('h2',{},'Two-step stories'),
+    h('p',{class:'hint'},'Plan first: is step 1 area or perimeter? Then use that answer in step 2.'),
+    chips, box));
+  draw();
+}
+
+/* irregular polygons with labelled sides (not drawn to scale) */
+var POLY_PTS={3:[[50,8],[94,88],[6,88]],4:[[10,14],[90,8],[96,86],[4,92]],5:[[50,4],[96,38],[80,94],[20,94],[4,38]],6:[[28,6],[72,6],[96,50],[72,94],[28,94],[4,50]]};
+function polySVG(sides, unit, o){
+  o=o||{};
+  var P=POLY_PTS[sides.length], S=2.6, ox=40, oy=26, cx=50, cy=50;
+  var pt=function(p){ return [ox+p[0]*S, oy+p[1]*S]; };
+  var out='<svg class="apsvg" viewBox="0 0 '+(100*S+2*ox)+' '+(100*S+2*oy+18)+'" width="'+(100*S+2*ox)+'" height="'+(100*S+2*oy+18)+'" role="img" aria-label="A shape with sides '+sides.join(', ')+' '+unit+'">';
+  out+='<polygon points="'+P.map(function(p){ return pt(p).join(' '); }).join(' ')+'" style="fill:var(--card)" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"/>';
+  for (var i=0;i<P.length;i++){
+    var a=pt(P[i]), b=pt(P[(i+1)%P.length]);
+    if (o.upto!=null && i<o.upto) out+='<line x1="'+a[0]+'" y1="'+a[1]+'" x2="'+b[0]+'" y2="'+b[1]+'" stroke="var(--c6)" stroke-width="7" stroke-linecap="round"/>';
+    var mx=(P[i][0]+P[(i+1)%P.length][0])/2, my=(P[i][1]+P[(i+1)%P.length][1])/2, dx=mx-cx, dy=my-cy, dl=Math.sqrt(dx*dx+dy*dy)||1;
+    var lx=ox+(mx+dx/dl*12)*S, ly=oy+(my+dy/dl*12)*S+6;
+    out+='<text x="'+lx+'" y="'+ly+'" text-anchor="middle" font-size="16" font-weight="700" fill="currentColor">'+sides[i]+' '+unit+'</text>';
+  }
+  out+='<text x="'+(ox+50*S)+'" y="'+(100*S+2*oy+12)+'" text-anchor="middle" font-size="12" fill="currentColor" opacity=".7">not drawn to scale</text>';
+  return out+'</svg>';
+}
+
+/* draw-your-own-shape pad (home page) */
+function drawPad(){
+  var R=6, C=10, on={}, cell=34, pad=6;
+  var svgBox=h('div',{class:'padbox'}), read=h('p',{class:'padread'});
+  function key(i,j){ return i+','+j; }
+  function render(){
+    var area=0, per=0, lines='';
+    var svg='<svg class="apsvg pad" viewBox="0 0 '+(C*cell+2*pad)+' '+(R*cell+2*pad)+'" width="'+(C*cell+2*pad)+'" height="'+(R*cell+2*pad)+'" role="img" aria-label="Drawing grid">';
+    for (var i=0;i<R;i++) for (var j=0;j<C;j++){
+      var f=on[key(i,j)];
+      svg+='<rect data-c="'+i+','+j+'" x="'+(pad+j*cell)+'" y="'+(pad+i*cell)+'" width="'+cell+'" height="'+cell+'" style="fill:'+(f?'var(--c0)':'var(--card)')+'" stroke="var(--line)" stroke-width="1.5"/>';
+      if (f){ area++;
+        var x=pad+j*cell, y=pad+i*cell;
+        if (!on[key(i-1,j)]){ per++; lines+='M'+x+' '+y+'h'+cell; }
+        if (!on[key(i+1,j)]){ per++; lines+='M'+x+' '+(y+cell)+'h'+cell; }
+        if (!on[key(i,j-1)]){ per++; lines+='M'+x+' '+y+'v'+cell; }
+        if (!on[key(i,j+1)]){ per++; lines+='M'+(x+cell)+' '+y+'v'+cell; }
+      }
+    }
+    if (lines) svg+='<path d="'+lines+'" stroke="var(--c6)" stroke-width="5" stroke-linecap="round" pointer-events="none"/>';
+    svgBox.innerHTML=svg+'</svg>';
+    read.innerHTML = area ? '<span class="pa">Area <b>'+area+'</b> square units</span><span class="pp">Perimeter <b>'+per+'</b> units</span>' : 'Tap squares to colour a shape.';
+  }
+  svgBox.addEventListener('click', function(e){ var t=e.target.closest ? e.target.closest('[data-c]') : null; if (!t) return; var k=t.getAttribute('data-c'); if (on[k]) delete on[k]; else on[k]=1; render(); });
+  render();
+  return h('div',{class:'padwrap'}, h('div',{class:'scroll-x'}, svgBox), read,
+    h('button',{class:'btn ghost', onclick:function(){ on={}; render(); }},'Clear'));
+}
+
+/* ================= learn pages ================= */
+function learnAPArea(root){ apPanelBuild(root,'area'); apPanelUnits(root); }
+function learnAPPerim(root){ apPanelBuild(root,'perim'); apPanelPoly(root); }
+function learnAPWhich(root){ apPanelSort(root); apPanelUnits(root); }
+function learnAPSame(root){ apPanelSame(root); }
+function learnAPMiss(root){ apPanelMissArea(root); apPanelMissPerim(root); }
+function learnAPL(root){ apPanelL(root); }
+function learnAPStory(root){ apPanelStories(root); }
+
+/* ================= extra quiz generators ================= */
+G.apPoly = function(){ var n=pick([3,4,5,6]), u=pick(AP_UNITS), s=[]; for (var i=0;i<n;i++) s.push(rnd(2,12)); var t=s.reduce(function(a,b){ return a+b; },0);
+  return {type:'num', prompt:'Find the perimeter of this shape.', visual:polySVG(s,u), unit:u, answer:t,
+    explain:'Add all '+n+' sides: '+s.join(' + ')+' = '+t+' '+u+'.'}; };
+G.apUnit = function(){ var u=pick(AP_UNITS), ar=Math.random()<.5, n=rnd(12,60);
+  var thing = ar ? pick(['The area of a rug','The area of a garden','The area of a poster','The area of a classroom floor']) : pick(['The perimeter of a rug','The perimeter of a garden','The perimeter of a poster','The distance around a park']);
+  return {type:'mc', prompt:thing+' is '+n+' ____. Which unit fits?', choices:[u,'square '+u], answer: ar ? 'square '+u : u,
+    explain: ar ? 'Area is counted in squares, so it is square '+u+'.' : 'Perimeter is a length around the edge, so it is just '+u+'.'}; };
+G.apCompare = function(){ var a,b,c2,d2,ask;
+  do { a=rnd(2,9); b=rnd(2,9); c2=rnd(2,9); d2=rnd(2,9); ask=Math.random()<.5?'area':'perimeter';
+  } while ((ask==='area' ? a*b===c2*d2 : a+b===c2+d2));
+  var vA = ask==='area' ? a*b : 2*(a+b), vB = ask==='area' ? c2*d2 : 2*(c2+d2);
+  return {type:'mc', prompt:'Rectangle A is <b>'+a+' cm by '+b+' cm</b>. Rectangle B is <b>'+c2+' cm by '+d2+' cm</b>. Which has the greater <b>'+ask+'</b>?', choices:['Rectangle A','Rectangle B'], answer: vA>vB ? 'Rectangle A' : 'Rectangle B',
+    explain: ask==='area' ? 'A: '+a+' '+TIMES+' '+b+' = '+vA+'. B: '+c2+' '+TIMES+' '+d2+' = '+vB+'.' : 'A: '+a+' + '+b+' + '+a+' + '+b+' = '+vA+'. B: '+c2+' + '+d2+' + '+c2+' + '+d2+' = '+vB+'.'}; };
+G.apSqSide = function(){ var u=pick(AP_UNITS), s=rnd(3,12), ar=Math.random()<.5;
+  return {type:'num', prompt:'A square has '+(ar ? 'an area of <b>'+(s*s)+' square '+u+'</b>' : 'a perimeter of <b>'+(4*s)+' '+u+'</b>')+'. How long is each side?', unit:u, answer:s,
+    explain: ar ? 'Which number times itself makes '+(s*s)+'? '+s+' '+TIMES+' '+s+' = '+(s*s)+', so each side = '+s+' '+u+'.' : 'A square has 4 equal sides: '+(4*s)+' '+DIVS+' 4 = '+s+' '+u+'.'}; };
+G.apStory1 = function(){ var L=rnd(4,12), W=rnd(2,9), ar=Math.random()<.5;
+  if (ar){ var th=pick([['A rug','covers'],['A garden bed','covers'],['A poster','covers']]);
+    return {type:'num', prompt:th[0]+' is <b>'+L+' ft</b> long and <b>'+W+' ft</b> wide. How many square feet of floor or wall does it cover?', unit:'square ft', answer:L*W,
+      explain:'Covering means area: '+L+' '+TIMES+' '+W+' = '+(L*W)+' square ft.'}; }
+  var th2=pick([['field','fence'],['bulletin board','border'],['playground','fence']]);
+  return {type:'num', prompt:'A '+th2[0]+' is <b>'+L+' m</b> long and <b>'+W+' m</b> wide. How many metres of '+th2[1]+' go all the way around it?', unit:'m', answer:2*(L+W),
+    explain:'Going around means perimeter: '+L+' + '+W+' + '+L+' + '+W+' = '+(2*(L+W))+' m.'}; };
+
+/* ================= MODULES (area & perimeter site) ================= */
+var MODULES = [
+  {id:'area', n:1, title:'What Is Area?', desc:'Count the squares inside', sym:'▦', color:'var(--c0)', learn:learnAPArea,
+   gens:[G.apCount,G.apArea,G.apCount,G.apArea]},
+  {id:'perim', n:2, title:'What Is Perimeter?', desc:'Walk all the way around', sym:'▢', color:'var(--c6)', learn:learnAPPerim,
+   gens:[G.apPerim,G.apSquare,G.apPoly,G.apPerim]},
+  {id:'which', n:3, title:'Area or Perimeter?', desc:'Inside or around? Pick the right one', sym:'?', color:'var(--c3)', learn:learnAPWhich,
+   gens:[G.apChoose,G.apUnit,G.apChoose,G.apCompare]},
+  {id:'same', n:4, title:'Same Area, New Shape', desc:'Equal area, different perimeters', sym:'=', color:'var(--c4)', learn:learnAPSame,
+   gens:[G.apSame,G.apCompare,G.apSame]},
+  {id:'miss', n:5, title:'Missing Sides', desc:'Work backwards to the unknown side', sym:'\u2194', color:'var(--c1)', symText:'#3A2A00', learn:learnAPMiss,
+   gens:[G.apMissArea,G.apMissPerim,G.apSqSide]},
+  {id:'lshape', n:6, title:'L-Shapes', desc:'Split into rectangles, then add', sym:'L', color:'var(--c5)', learn:learnAPL,
+   gens:[G.apL,G.apLPerim]},
+  {id:'story', n:7, title:'Story Problems', desc:'Plan, then solve in two steps', sym:'$', color:'var(--teal)', learn:learnAPStory,
+   gens:[G.apWord,G.apStory1,G.apWord]},
+  {id:'mixed', n:8, title:'Final Challenge', desc:'10 mixed questions from every stop', sym:'★', color:'var(--ink)', symText:'var(--paper)', learn:null, qcount:10}
+];
+function make(g){ var q=g(); q.key=g.key; return q; }
+function quizFrom(gens, count){ var order=[]; while (order.length<count) order=order.concat(shuffle(gens)); return order.slice(0,count).map(make); }
+Object.keys(G).forEach(function(k){ G[k].key=k; });
+MODULES.forEach(function(m){
+  m.makeQuiz = m.id==='mixed' ? function(count){
+    var mods=MODULES.filter(function(x){ return x.id!=='mixed'; }), gens=mods.map(function(x){ return pick(x.gens); });
+    while (gens.length<count) gens.push(pick(pick(mods).gens));
+    return shuffle(gens).map(make);
+  } : function(count){ return quizFrom(m.gens, count); };
+});
+
+/* ================= QUIZ ENGINE ================= */
+function runQuiz(root, m){
+  var count=m.qcount||5, qs, i, score, results;
+  function start(){ qs=m.makeQuiz(count); i=0; score=0; results=[]; show(); }
+  function show(){
+    root.innerHTML='';
+    var q=qs[i], done=false; root.__q=q;
+    var dots=h('div',{class:'qdots','aria-hidden':'true'}, qs.map(function(_,k){ return h('span',{class: k<results.length ? (results[k]?'ok':'no') : (k===i?'cur':'')}); }));
+    var fb=h('div',{class:'feedback', role:'status','aria-live':'polite'}), area=h('div');
+    root.append(h('section',{class:'panel quiz'},
+      h('div',{class:'qtop'}, h('span',{class:'progress'}, 'Question '+(i+1)+' of '+qs.length), dots),
+      h('div',{class:'qprompt', html:q.prompt}), q.visual ? h('div',{class:'qvisual', html:q.visual}) : null, area, fb));
+    function finish(ok, shown){
+      if (done) return; done=true; results.push(ok); if (ok) score++;
+      dots.children[i].className = ok ? 'ok' : 'no';
+      fb.className='feedback '+(ok?'good':'bad');
+      fb.innerHTML = (ok ? '<b>'+pick(['Yes! ','Nailed it! ','Correct! ','Great thinking! '])+'</b>' : '<b>Not quite.</b> The answer is <b>'+shown+'</b>. ')+(q.explain||'');
+      var nx=h('button',{class:'btn go', onclick:function(){ i++; if (i<qs.length) show(); else end(); }}, i+1<qs.length ? 'Next question' : 'See my score');
+      fb.append(h('div',{class:'fb-actions'}, nx)); nx.focus();
+    }
+    if (q.type==='mc'){
+      var grid=h('div',{class:'choices'});
+      q.choices.forEach(function(c){
+        var b=h('button',{class:'btn choice', html:c, onclick:function(){
+          if (done) return; var ok = c===q.answer;
+          b.classList.add(ok?'right':'wrong');
+          Array.prototype.forEach.call(grid.children, function(x){ if (x.__v===q.answer) x.classList.add('right'); x.disabled=true; });
+          finish(ok, q.answer);
+        }});
+        b.__v=c; grid.append(b);
+      });
+      area.append(grid);
+    } else if (q.type==='num'){
+      var inp=h('input',{type:'text',inputmode:'numeric',autocomplete:'off',class:'ans','aria-label':'Your answer'});
+      var btn=h('button',{class:'btn go'},'Check');
+      var checkNum = function(){
+        if (done) return; var v=parseNum(inp.value);
+        if (v===''){ toast('Type your answer first.'); inp.focus(); return; }
+        var ok = Number(v)===q.answer; inp.classList.add(ok?'right':'wrong'); inp.disabled=true; btn.disabled=true; finish(ok, fmt(q.answer));
+      };
+      btn.addEventListener('click', checkNum);
+      inp.addEventListener('keydown', function(e){ if (e.key==='Enter') checkNum(); });
+      area.append(h('div',{class:'answer-row'}, inp, q.unit ? h('span',{class:'unit'}, q.unit) : null, btn));
+      setTimeout(function(){ inp.focus(); }, 40);
+    } else if (q.type==='qr'){
+      var iq=h('input',{type:'text',inputmode:'numeric',autocomplete:'off',class:'ans sm','aria-label':'Quotient'});
+      var ir=h('input',{type:'text',inputmode:'numeric',autocomplete:'off',class:'ans sm','aria-label':'Remainder'});
+      var btn2=h('button',{class:'btn go'},'Check');
+      var checkQR = function(){
+        if (done) return; var a=parseNum(iq.value), r=parseNum(ir.value)||'0';
+        if (a===''){ toast('Type the quotient first.'); iq.focus(); return; }
+        var ok = Number(a)===q.answer.q && Number(r)===q.answer.r;
+        [iq,ir].forEach(function(x){ x.classList.add(ok?'right':'wrong'); x.disabled=true; }); btn2.disabled=true;
+        finish(ok, q.answer.q+(q.answer.r ? ' r'+q.answer.r : ''));
+      };
+      btn2.addEventListener('click', checkQR);
+      [iq,ir].forEach(function(x){ x.addEventListener('keydown', function(e){ if (e.key==='Enter') checkQR(); }); });
+      area.append(h('div',{class:'answer-row'}, iq, h('span',{class:'pre'},'r'), ir, btn2));
+      setTimeout(function(){ iq.focus(); }, 40);
+    }
+  }
+  function end(){
+    root.innerHTML='';
+    var n=qs.length, st = n>=10 ? (score>=9?3:score>=7?2:score>=5?1:0) : (score===5?3:score===4?2:score===3?1:0);
+    recordResult(m.id, score, n, st, qs, results);
+    queueResult(me(), m, score, n, st, qs.filter(function(q,k){ return !results[k] && q.key; }).map(function(q){ return q.key; }));
+    if (st>=2) confetti();
+    var msg = st===3 ? 'Perfect work. You really understand this.' : st===2 ? 'Great job. One more round could get you 3 stars.' :
+      st===1 ? 'Good start. Look at the Learn part again, then have another go.' : 'Let\u2019s go through the Learn part together, then try again.';
+    root.append(h('section',{class:'panel result'},
+      h('div',{class:'big-stars', html:starsHTML(st), role:'img', 'aria-label':st+' of 3 stars'}),
+      h('h2',{}, 'You got '+score+' out of '+n), h('p',{}, msg),
+      h('div',{class:'result-actions'},
+        h('button',{class:'btn go', onclick:start},'Play again'),
+        m.learn ? h('button',{class:'btn', onclick:function(){ go(m.id,'learn'); }},'Back to Learn') : null,
+        h('button',{class:'btn', onclick:function(){ go('home'); }},'Back to the path'))));
+  }
+  start();
+}
+
+/* ================= VIEWS & ROUTING ================= */
+function odometer(){
+  var n=125347, box=h('div',{class:'panel odo-card'}), row=h('div',{class:'odo'}), say=h('p',{class:'odo-say'});
+  function draw(){
+    var d=digitsOf(n,6); row.innerHTML='';
+    for (var p=5;p>=0;p--){
+      (function(p){
+        row.append(h('div',{class:'wheel', style:'--wc:var(--c'+p+')'},
+          h('button',{class:'spin','aria-label':cap(PV[p].n)+' up', onclick:function(){ d[p]=(d[p]+1)%10; set(d); }},'\u25B2'),
+          h('div',{class:'face'+(p===1?' dark':''),'aria-live':'polite'}, d[p]),
+          h('button',{class:'spin','aria-label':cap(PV[p].n)+' down', onclick:function(){ d[p]=(d[p]+9)%10; set(d); }},'\u25BC'),
+          h('small',{}, cap(PV[p].n))));
+        if (p===3) row.append(h('span',{class:'comma','aria-hidden':'true'},','));
+      })(p);
+    }
+    say.innerHTML = n===0 ? 'Spin a digit to start.' : '<b>'+fmt(n)+'</b> is <i>'+words(n)+'</i>';
+  }
+  function set(d){ n=d.reduce(function(s,x,p){ return s+x*Math.pow(10,p); },0); draw(); }
+  draw(); box.append(row, say); return box;
+}
+function renderHome(){
+  var grid=h('div',{class:'stations'});
+  MODULES.forEach(function(m){
+    grid.append(h('button',{class:'station', style:'--sc:'+m.color+(m.symText?';--st:'+m.symText:''), onclick:function(){ go(m.id, m.learn?'learn':'quiz'); }},
+      h('span',{class:'sym','aria-hidden':'true'}, m.sym),
+      h('span',{class:'st-body'},
+        h('span',{class:'st-stop'},'Stop '+m.n),
+        h('span',{class:'st-title'}, m.title),
+        h('span',{class:'st-desc'}, m.desc),
+        h('span',{class:'stars', html:starsHTML(bestOf(m.id)), 'aria-label':bestOf(m.id)+' of 3 stars'}))));
+  });
+  app.append(
+    h('section',{class:'hero'},
+      h('h1',{},'Hi, '+learnerName()+'!'),
+      h('p',{class:'lede'},'Colour some squares to make any shape. Watch its area (green) and perimeter (orange). Then pick a stop on your path.'),
+      drawPad()),
+    h('section',{class:'path'},
+      h('div',{class:'path-head'}, h('h2',{},'Your path'), h('p',{class:'muted'},'Earn up to 3 stars at every stop.')),
+      grid));
+}
+function renderModule(m, tab){
+  var head=h('div',{class:'mod-head'},
+    h('button',{class:'btn ghost', onclick:function(){ go('home'); }},'\u2039 Path'),
+    h('div',{class:'mod-title'},
+      h('span',{class:'sym sm', style:'--sc:'+m.color+(m.symText?';--st:'+m.symText:''),'aria-hidden':'true'}, m.sym),
+      h('div',{}, h('span',{class:'st-stop'},'Stop '+m.n), h('h1',{}, m.title))),
+    m.learn ? h('div',{class:'tabs', role:'tablist'},
+      h('button',{class:'tab'+(tab==='learn'?' on':''), role:'tab','aria-selected':String(tab==='learn'), onclick:function(){ go(m.id,'learn'); }},'Learn'),
+      h('button',{class:'tab'+(tab==='quiz'?' on':''), role:'tab','aria-selected':String(tab==='quiz'), onclick:function(){ go(m.id,'quiz'); }},'Quiz')) : null);
+  var body=h('div');
+  app.append(head, body);
+  if (tab==='learn' && m.learn){
+    m.learn(body);
+    body.append(h('div',{class:'next-cta'}, h('span',{},'Ready to show what you know?'), h('button',{class:'btn go big', onclick:function(){ go(m.id,'quiz'); }},'Start the quiz')));
+  } else runQuiz(body, m);
+}
+function route(keepScroll){
+  var parts=location.hash.replace('#','').split('/'), m=null;
+  MODULES.forEach(function(x){ if (x.id===parts[0]) m=x; });
+  app.innerHTML='';
+  if (!me() || parts[0]==='welcome') renderWelcome();
+  else if (parts[0]==='progress') renderProgress();
+  else if (!m) renderHome();
+  else renderModule(m, (parts[1]==='quiz' || !m.learn) ? 'quiz' : 'learn');
+  if (!keepScroll) window.scrollTo(0,0);
+}
+function when(t){
+  var d=new Date(t), now=new Date(), day=86400000;
+  var sameDay=d.toDateString()===now.toDateString(), yest=new Date(now.getTime()-day).toDateString()===d.toDateString();
+  var time=d.toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});
+  return sameDay ? 'Today, '+time : yest ? 'Yesterday, '+time : d.toLocaleDateString([], {day:'numeric', month:'short'})+', '+time;
+}
+function renderWelcome(){
+  var list=Object.keys(learners).map(function(k){ return learners[k]; }).sort(function(a,b){ return (b.updatedAt||0)-(a.updatedAt||0); });
+  var inp=h('input',{type:'text', class:'ans name-in', maxlength:'30', autocomplete:'off', 'aria-label':'Your first name', placeholder:'First name'});
+  function start(){
+    var name=inp.value.replace(/\s+/g,' ').trim();
+    if (!name){ toast('Type a name first.'); inp.focus(); return; }
+    var match=list.filter(function(l){ return l.name.toLowerCase()===name.toLowerCase(); })[0];
+    if (match){ selectLearner(match.id); return; }
+    var s=newLearner(name); persist(s); selectLearner(s.id);
+  }
+  inp.addEventListener('keydown', function(e){ if (e.key==='Enter') start(); });
+  var card=h('section',{class:'panel welcome'});
+  if (list.length){
+    card.append(h('h2',{},'Who is learning today?'),
+      h('div',{class:'learners'}, list.map(function(l){
+        return h('button',{class:'learner', onclick:function(){ selectLearner(l.id); }},
+          h('span',{class:'l-name'}, l.name),
+          h('span',{class:'l-meta'}, totalStars(l)+' of '+(MODULES.length*3)+' stars'+((l.attempts&&l.attempts.length) ? ' \u2022 last played '+when(l.attempts[l.attempts.length-1].at) : '')));
+      })),
+      h('h3',{class:'or'},'New here? Type your name to start.'));
+  } else {
+    card.append(h('h2',{},'What\u2019s your name?'), h('p',{class:'hint'},'Your stars and quiz scores will be saved under your name.'));
+  }
+  card.append(h('div',{class:'answer-row'}, inp, h('button',{class:'btn go', onclick:start},'Start')));
+  app.append(h('section',{class:'hero'},
+      h('h1',{},'Area & Perimeter Workshop'),
+      h('p',{class:'lede'},'Count squares, walk around shapes, split L-shapes and solve stories. Then test yourself.')),
+    card);
+  if (!list.length) setTimeout(function(){ inp.focus(); }, 50);
+}
+function renderProgress(){
+  var s=me(), mods={}; MODULES.forEach(function(m){ mods[m.id]=m; });
+  var att=(s.attempts||[]), skills=s.skills||{}, right=0, wrong=0;
+  Object.keys(skills).forEach(function(k){ right+=skills[k].r; wrong+=skills[k].w; });
+  var acc = right+wrong ? Math.round(100*right/(right+wrong)) : null;
+  var ranked=Object.keys(skills).filter(function(k){ return skills[k].r+skills[k].w>=2; }).map(function(k){ var t=skills[k]; return {k:k, pct:Math.round(100*t.r/(t.r+t.w)), n:t.r+t.w}; });
+  var weak=ranked.filter(function(x){ return x.pct<70; }).sort(function(a,b){ return a.pct-b.pct; }).slice(0,6);
+  var strong=ranked.filter(function(x){ return x.pct>=90; }).sort(function(a,b){ return b.n-a.n; }).slice(0,6);
+  var lastBy={}; att.forEach(function(a){ lastBy[a.m]=a; });
+  var table=h('table',{class:'ptable'},
+    h('thead',{}, h('tr',{}, h('th',{},'Stop'), h('th',{},'Best'), h('th',{},'Played'), h('th',{},'Last score'))),
+    h('tbody',{}, MODULES.map(function(m){
+      var l=lastBy[m.id];
+      return h('tr',{}, h('td',{}, m.n+'. '+m.title), h('td',{class:'stars', html:starsHTML(bestOf(m.id))}),
+        h('td',{}, String((s.plays&&s.plays[m.id])||0)), h('td',{}, l ? l.score+' / '+l.total : '\u2013'));
+    })));
+  function skillList(items, empty){
+    if (!items.length) return h('p',{class:'hint'}, empty);
+    return h('ul',{class:'skills'}, items.map(function(x){ return h('li',{}, h('span',{}, SKILL[x.k]||x.k), h('b',{}, x.pct+'%'), h('span',{class:'muted'}, ' of '+x.n)); }));
+  }
+  var recent=att.slice(-10).reverse();
+  var saveNote = cloud.db && cloud.writable ? 'Saved to this page\u2019s progress store, so it is there on any device where you open this page while signed in.' :
+    'Saved in this browser on this device.';
+  app.append(
+    h('div',{class:'mod-head'},
+      h('button',{class:'btn ghost', onclick:function(){ go('home'); }},'\u2039 Path'),
+      h('div',{class:'mod-title'}, h('div',{}, h('span',{class:'st-stop'},'Progress'), h('h1',{}, s.name)))),
+    h('div',{class:'stats'},
+      h('div',{class:'stat panel'}, h('b',{}, totalStars(s)+' / '+(MODULES.length*3)), h('span',{},'stars earned')),
+      h('div',{class:'stat panel'}, h('b',{}, String(att.length)), h('span',{},'quizzes played')),
+      h('div',{class:'stat panel'}, h('b',{}, acc==null ? '\u2013' : acc+'%'), h('span',{},'questions right'))),
+    h('section',{class:'panel'}, h('h2',{},'Stops'), h('div',{class:'scroll-x'}, table)),
+    h('div',{class:'two-col'},
+      h('section',{class:'panel'}, h('h2',{},'Needs more practice'), skillList(weak,'Nothing yet. After a few quizzes, question types with under 70% right show up here.')),
+      h('section',{class:'panel'}, h('h2',{},'Going well'), skillList(strong,'After a few quizzes, question types with 90% or more right show up here.'))),
+    h('section',{class:'panel'}, h('h2',{},'Recent quizzes'),
+      recent.length ? h('ul',{class:'recent'}, recent.map(function(a){
+        return h('li',{}, h('span',{class:'muted'}, when(a.at)), h('span',{}, (mods[a.m]||{title:a.m}).title), h('b',{}, a.score+' / '+a.total), h('span',{class:'stars', html:starsHTML(a.stars)}));
+      })) : h('p',{class:'hint'},'No quizzes yet. Pick a stop on the path and try its quiz.')),
+    h('div',{class:'step-actions'},
+      h('button',{class:'btn', onclick:function(){ go('welcome'); }},'Switch learner'),
+      h('button',{class:'btn ghost', onclick:function(){
+        if (window.confirm('Remove '+s.name+' and all of their progress? This cannot be undone.')){ removeLearner(s.id); go('welcome'); }
+      }},'Remove this learner')),
+    h('p',{class:'hint', style:'margin-top:14px'}, saveNote + (sheetOn() ? ' Quiz results are also sent to your tutor.' + (outboxLoad().length ? ' ' + outboxLoad().length + ' waiting to send.' : '') : '')));
+}
+function go(view, tab){
+  var t = (view==='home'||view==='welcome'||view==='progress') ? '#'+view : '#'+view+'/'+(tab||'learn');
+  if (location.hash===t) route(); else location.hash=t;
+}
+window.addEventListener('hashchange', route);
+document.getElementById('brand').addEventListener('click', function(){ go('home'); });
+document.getElementById('who').addEventListener('click', function(){ go('progress'); });
+window.__G = G; window.__MODULES = MODULES; window.__MS = MS; window.__AP_STORIES = AP_STORIES; window.__AP = {gridSVG:gridSVG, rectSVG:rectSVG, LSVG:LSVG};
+lsLoad();
+refreshChrome();
+route();
+initCloud();
+flushOutbox();
+})();
+</script>
+</body>
+</html>
